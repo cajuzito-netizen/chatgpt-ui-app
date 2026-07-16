@@ -1,0 +1,136 @@
+import { ChevronsUpDown, LifeBuoy, LogOut, User, UserRoundCog } from 'lucide-react'
+import {
+  Menu,
+  MenuContent,
+  MenuItem,
+  MenuSeparator,
+  MenuTrigger,
+} from '~/components/ui/menu'
+import {
+  SIDEBAR_CHEVRON,
+  SIDEBAR_FOOTER_AVATAR,
+  SIDEBAR_FOOTER_ROW,
+} from '~/components/shell/footer-row'
+import { cn } from '~/lib/utils'
+
+/**
+ * Live ChatGPT profile control geometry (Patchright):
+ * h≈52, pad 6 6 6 8, margin 0 6 0 8, gap 8, radius 10, avatar 24×24
+ *
+ * Collapsed rail: menu opens to the right with user card on top (like chatgpt.com).
+ */
+export function UserAccountMenu({
+  open,
+  displayName,
+  email,
+  initials,
+  onProfile,
+  onPreferences,
+  onSupport,
+  onLogout,
+}: {
+  open: boolean
+  displayName: string
+  email: string
+  initials: string
+  onProfile: () => void
+  onPreferences: () => void
+  onSupport: () => void
+  onLogout: () => void
+}) {
+  const collapsed = !open
+
+  return (
+    <Menu>
+      <MenuTrigger
+        className={cn(
+          SIDEBAR_FOOTER_ROW,
+          'group/profile pill-focus border-0 bg-transparent text-left',
+          'hover:bg-black/[0.05] dark:hover:bg-white/10',
+        )}
+        aria-label={`Account menu for ${displayName}`}
+        aria-haspopup="menu"
+      >
+        <span
+          className={cn(
+            SIDEBAR_FOOTER_AVATAR,
+            'sidebar-avatar--initials bg-teal-500 text-white',
+          )}
+          aria-hidden
+        >
+          {initials}
+        </span>
+        <span
+          className={cn(
+            'sidebar-label min-w-0 flex-1 text-left',
+            open && 'sidebar-label--expanded',
+          )}
+        >
+          <span className="flex min-w-0 items-center gap-2">
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[14px] font-medium leading-5">
+                {displayName}
+              </span>
+              <span className="block truncate text-[12px] leading-4 text-ink-secondary dark:text-dark-ink-secondary">
+                {email}
+              </span>
+            </span>
+            <ChevronsUpDown className={SIDEBAR_CHEVRON} aria-hidden />
+          </span>
+        </span>
+      </MenuTrigger>
+      <MenuContent
+        side={collapsed ? 'right' : 'top'}
+        align={collapsed ? 'end' : 'start'}
+        sideOffset={collapsed ? 10 : 8}
+        className="w-64"
+      >
+        {/* Collapsed rail: identity card at top (live: same mx/radius as items) */}
+        {collapsed && (
+          <>
+            <div className="mx-1.5 flex items-center gap-2 rounded-[10px] px-2.5 py-1.5">
+              <span
+                className={cn(
+                  SIDEBAR_FOOTER_AVATAR,
+                  'sidebar-avatar--initials bg-teal-500 text-white',
+                )}
+                aria-hidden
+              >
+                {initials}
+              </span>
+              <div className="min-w-0 flex-1 text-left">
+                <p className="truncate text-[14px] font-medium leading-5">
+                  {displayName}
+                </p>
+                <p className="truncate text-[12px] leading-4 text-ink-secondary dark:text-dark-ink-secondary">
+                  {email}
+                </p>
+              </div>
+            </div>
+            <MenuSeparator />
+          </>
+        )}
+        <MenuItem onClick={onProfile}>
+          <User className="h-[18px] w-[18px] opacity-80" strokeWidth={1.5} />
+          Profile
+        </MenuItem>
+        <MenuItem onClick={onPreferences}>
+          <UserRoundCog
+            className="h-[18px] w-[18px] opacity-80"
+            strokeWidth={1.5}
+          />
+          Preferences
+        </MenuItem>
+        <MenuItem onClick={onSupport}>
+          <LifeBuoy className="h-[18px] w-[18px] opacity-80" strokeWidth={1.5} />
+          Support
+        </MenuItem>
+        <MenuSeparator />
+        <MenuItem onClick={onLogout}>
+          <LogOut className="h-[18px] w-[18px] opacity-80" strokeWidth={1.5} />
+          Log out
+        </MenuItem>
+      </MenuContent>
+    </Menu>
+  )
+}

@@ -1,0 +1,101 @@
+{
+  "first": {
+    "text": "Alex Rivera Free",
+    "item": {
+      "padding": "6px 10px",
+      "margin": "0px 6px",
+      "radius": "10px",
+      "tl": "10px",
+      "tr": "10px",
+      "bl": "10px",
+      "br": "10px",
+      "bg": "rgba(0, 0, 0, 0.05)",
+      "h": 51.140625,
+      "w": 236,
+      "className": "group __menu-item bg-transparent! hover:bg-token-interactive-bg-secondary-selected! keyboard-focused:bg-token-interactive-bg-secondary-selected! data-[state=open]:bg-token-interactive-bg-secondary-selected! gap-2! [&>div:first-child]:gap-2!"
+    },
+    "menu": {
+      "padding": "6px 0px",
+      "radius": "16px",
+      "bg": "rgb(255, 255, 255)",
+      "overflow": "auto",
+      "w": 248,
+      "h": 297.140625,
+      "className": "z-50 max-w-xs rounded-2xl popover bg-token-main-surface-primary dark:bg-[#353535] shadow-long py-1.5 data-[unbound-width]:min-w-[unset] data-[custom-padding]:py-0 MA-gxq_content [--trigger-width:calc(var(--radix-dropdown-menu-trigger-width)-2*var(--r"
+    },
+    "inset": {
+      "l": 6,
+      "r": 6,
+      "t": 6,
+      "b": 240
+    },
+    "parentPad": "0px",
+    "parentRadius": "0px"
+  },
+  "last": {
+    "text": "Add account",
+    "item": {
+      "padding": "6px 32px 6px 10px",
+      "margin": "0px 6px",
+      "radius": "10px",
+      "tl": "10px",
+      "tr": "10px",
+      "bl": "10px",
+      "br": "10px",
+      "bg": "rgba(0, 0, 0, 0.04)",
+      "h": 36,
+      "w": 268,
+      "className": "group __menu-item gap-1.5"
+    },
+    "menu": {
+      "padding": "6px 0px",
+      "radius": "16px",
+      "bg": "rgb(255, 255, 255)",
+      "overflow": "auto",
+      "w": 280,
+      "h": 129,
+      "className": "z-50 rounded-2xl popover bg-token-main-surface-primary dark:bg-[#353535] shadow-long py-1.5 select-none data-[unbound-width]:min-w-[unset] data-[custom-padding]:py-0 mt-2 max-h-[calc(100vh-300px)] overflow-auto w-max max-w-[calc(100vw-24px)] min-w-[2"
+    },
+    "inset": {
+      "l": 6,
+      "r": 6,
+      "t": 87,
+      "b": 6
+    },
+    "parentPad": "6px 0px",
+    "parentRadius": "16px"
+  },
+  "mid": {
+    "text": "Personalization",
+    "item": {
+      "padding": "6px 32px 6px 10px",
+      "margin": "0px 6px",
+      "radius": "10px",
+      "tl": "10px",
+      "tr": "10px",
+      "bl": "10px",
+      "br": "10px",
+      "bg": "rgba(0, 0, 0, 0.04)",
+      "h": 36,
+      "w": 236,
+      "className": "group __menu-item gap-1.5"
+    },
+    "menu": {
+      "padding": "6px 0px",
+      "radius": "16px",
+      "bg": "rgb(255, 255, 255)",
+      "overflow": "auto",
+      "w": 248,
+      "h": 297.140625,
+      "className": "z-50 max-w-xs rounded-2xl popover bg-token-main-surface-primary dark:bg-[#353535] shadow-long py-1.5 data-[unbound-width]:min-w-[unset] data-[custom-padding]:py-0 MA-gxq_content [--trigger-width:calc(var(--radix-dropdown-menu-trigger-width)-2*var(--r"
+    },
+    "inset": {
+      "l": 6,
+      "r": 6,
+      "t": 102.14,
+      "b": 159
+    },
+    "parentPad": "0px",
+    "parentRadius": "0px"
+  }
+}
