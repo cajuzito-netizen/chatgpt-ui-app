@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export function HydrateFallback() {
   return (
-    <div className="flex h-full items-center justify-center bg-surface text-ink-secondary">
+    <div className="flex h-full items-center justify-center bg-background text-muted-foreground">
       Loading…
     </div>
   )

@@ -104,8 +104,7 @@ function DrawerContent({
           data-slot="drawer-content"
           data-side={side}
           className={cn(
-            'fixed z-50 flex flex-col bg-surface text-ink outline-none',
-            'dark:bg-dark-surface dark:text-dark-ink',
+            'fixed z-50 flex flex-col bg-background text-foreground outline-none',
             'transition-transform duration-200 ease-out',
             'data-swiping:duration-0',
             'motion-reduce:transition-none',

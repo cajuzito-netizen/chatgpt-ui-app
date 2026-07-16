@@ -3,12 +3,6 @@ import { useNavigate } from 'react-router'
 import { Check, ChevronsUpDown, Plus, Settings } from 'lucide-react'
 import { FreeUpgradeBadge, PlanBadge } from '~/components/shell/PlanBadge'
 import {
-  SHELL_CHEVRON,
-  SHELL_WS_MARK,
-  shellFooterRowClass,
-  shellLabelClass,
-} from '~/components/shell/shell-classes'
-import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -27,6 +21,12 @@ import { createWorkspace, setActiveWorkspace } from '~/lib/store'
 import { useAppStore } from '~/lib/use-store'
 import { cn } from '~/lib/utils'
 
+const WS_MARK =
+  'box-border flex size-6 shrink-0 items-center justify-center rounded-md bg-black/10 text-[11px] font-semibold leading-none pointer-events-none dark:bg-white/15'
+
+const CHEVRON =
+  'h-4 w-4 shrink-0 text-muted-foreground opacity-40 transition-opacity group-hover/ws:opacity-70 group-hover/profile:opacity-70'
+
 /**
  * Workspace footer card.
  *
@@ -43,6 +43,7 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
   const letter = (active?.name ?? 'W').slice(0, 1).toUpperCase()
   const plan = active?.plan ?? 'free'
   const workspaceId = active?.id ?? data.activeWorkspaceId
+  const collapsed = !open
 
   function goWorkspace(id: string) {
     setActiveWorkspace(id)
@@ -78,8 +79,10 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
         */}
         <div
           className={cn(
-            shellFooterRowClass(!open),
-            'group/ws relative',
+            'group/ws relative box-border flex h-12 min-h-10 cursor-pointer items-center overflow-hidden pointer-events-auto',
+            'ml-2 mr-1.5 w-[calc(100%-0.875rem)] max-w-[calc(100%-0.875rem)]',
+            'rounded-[10px] py-1.5 pr-1.5 pl-2',
+            collapsed ? 'gap-0' : 'gap-2',
             'hover:bg-black/[0.05] dark:hover:bg-white/10',
           )}
         >
@@ -97,19 +100,16 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
             aria-haspopup="menu"
           />
 
-          {/* Visual layer — ignores clicks except Free chip */}
-          <span
-            className={cn(SHELL_WS_MARK, 'relative z-[11] pointer-events-none')}
-            aria-hidden
-          >
+          <span className={cn(WS_MARK, 'relative z-[11]')} aria-hidden>
             {letter}
           </span>
 
           <span
-            className={shellLabelClass(
-              open,
-              true,
-              'relative z-[11] pointer-events-none',
+            className={cn(
+              'relative z-[11] min-w-0 pointer-events-none',
+              open
+                ? 'flex-1 opacity-100'
+                : 'w-0 max-w-0 min-w-0 flex-[0_0_0] overflow-hidden opacity-0',
             )}
           >
             <span className="flex min-w-0 items-center gap-2">
@@ -137,7 +137,7 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
               )}
 
               <ChevronsUpDown
-                className={cn(SHELL_CHEVRON, 'pointer-events-none')}
+                className={cn(CHEVRON, 'pointer-events-none')}
                 aria-hidden
               />
             </span>
@@ -153,14 +153,14 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
             Workspace settings
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <div className="mx-1.5 px-2.5 py-1.5 text-[11px] font-medium uppercase tracking-wide text-ink-tertiary">
+          <div className="mx-1.5 px-2.5 py-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
             Switch workspace
           </div>
           {data.workspaces.map((w) => {
             const isActive = w.id === data.activeWorkspaceId
             return (
               <DropdownMenuItem key={w.id} onClick={() => goWorkspace(w.id)}>
-                <span className={SHELL_WS_MARK}>
+                <span className={WS_MARK}>
                   {w.name.slice(0, 1).toUpperCase()}
                 </span>
                 <span className="min-w-0 flex-1 truncate">{w.name}</span>
@@ -184,7 +184,7 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent showCloseButton className="max-w-sm">
           <DialogTitle>New workspace</DialogTitle>
-          <p className="mt-1 text-[13px] text-ink-secondary dark:text-dark-ink-secondary">
+          <p className="mt-1 text-[13px] text-muted-foreground">
             New workspaces start on Free. Upgrade anytime from Settings → Plan.
           </p>
           <div className="mt-4">

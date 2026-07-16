@@ -7,17 +7,6 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { Menu as MenuIcon, PanelLeft, Sparkles, X } from 'lucide-react'
 import { BrandMark } from '~/components/shell/BrandMark'
-import {
-  SHELL_ASIDE,
-  SHELL_FOOTER,
-  SHELL_FOOTER_RULE,
-  SHELL_NAV,
-  SHELL_NAV_ICON,
-  shellAsideMotion,
-  shellChromeClass,
-  shellLabelClass,
-  shellNavItemClass,
-} from '~/components/shell/shell-classes'
 import { SupportDialog } from '~/components/shell/SupportDialog'
 import { UserAccountMenu } from '~/components/shell/UserAccountMenu'
 import { WorkspaceSwitcher } from '~/components/shell/WorkspaceSwitcher'
@@ -50,7 +39,7 @@ import { useAppStore } from '~/lib/use-store'
 import { cn } from '~/lib/utils'
 
 const ICON_BTN =
-  'pill-focus flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-ink hover:bg-black/[0.07] dark:text-white dark:hover:bg-white/10'
+  'pill-focus flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-foreground hover:bg-black/[0.07] dark:hover:bg-white/10'
 
 const MD_MIN = 768
 
@@ -128,7 +117,7 @@ function ShellChrome({
         Live: open control at (8,8) 36×36 — ~8px from edges.
         Keep one brand node always mounted so collapse doesn’t remount/flicker icons.
       */}
-      <div className="relative flex h-13 shrink-0 items-center px-2 pt-2">
+      <div className="relative flex h-12 shrink-0 items-center px-2 pt-2">
         <Tip content="Open sidebar" side="right" disabled={!railCollapsed}>
           <button
             type="button"
@@ -170,7 +159,17 @@ function ShellChrome({
           </button>
         </Tip>
 
-        <div className={shellChromeClass(open, shellReady)}>
+        <div
+          className={cn(
+            'ms-auto flex shrink-0 items-center gap-0.5',
+            open ? 'opacity-100' : 'pointer-events-none opacity-0',
+            shellReady &&
+              'transition-opacity duration-150 ease-linear motion-reduce:duration-[0.01ms]',
+            shellReady &&
+              open &&
+              'duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]',
+          )}
+        >
           {!isDesktop && (
             <button
               type="button"
@@ -187,7 +186,7 @@ function ShellChrome({
                 type="button"
                 className={cn(
                   ICON_BTN,
-                  'cursor-w-resize text-ink-tertiary hover:bg-black/[0.07] hover:text-ink-tertiary',
+                  'cursor-w-resize text-muted-foreground hover:bg-black/[0.07] hover:text-muted-foreground',
                 )}
                 onClick={onClose}
                 aria-label="Close sidebar"
@@ -200,10 +199,10 @@ function ShellChrome({
         </div>
       </div>
 
-      {/* Live: first nav ≈ y:60 → header h-13 (52) + 8px spacer */}
+      {/* Brand header + spacer (~ first nav y) */}
       <div className="h-2 shrink-0" aria-hidden />
 
-      <nav className={SHELL_NAV}>
+      <nav className="relative z-10 flex min-h-0 flex-1 flex-col gap-px overflow-y-auto overflow-x-hidden">
         {PRODUCT_NAV.map((item) => {
           const Icon = item.icon
           const hideRow = railCollapsed && !item.onRail
@@ -218,7 +217,10 @@ function ShellChrome({
               to={href}
               onClick={onCloseMobile}
               className={cn(
-                shellNavItemClass(railCollapsed),
+                'box-border flex h-9 min-h-9 items-center overflow-hidden',
+                'mx-1.5 w-[calc(100%-0.75rem)] max-w-[calc(100%-0.75rem)]',
+                'rounded-[10px] px-2.5 py-1.5 text-left text-[14px] font-normal leading-5',
+                railCollapsed ? 'gap-0' : 'gap-1.5',
                 hideRow &&
                   'pointer-events-none !m-0 !h-0 !max-h-0 !overflow-hidden !p-0 !opacity-0',
                 /* Hover always on visible rows — collapsed rail matches brand open control */
@@ -233,10 +235,25 @@ function ShellChrome({
               aria-current={active ? 'page' : undefined}
               tabIndex={hideRow ? -1 : 0}
             >
-              <span className={cn(SHELL_NAV_ICON, 'opacity-80')} aria-hidden>
+              <span
+                className="pointer-events-none box-border flex size-5 shrink-0 items-center justify-center opacity-80 [&_svg]:block [&_svg]:size-5 [&_svg]:shrink-0"
+                aria-hidden
+              >
                 <Icon strokeWidth={1.5} />
               </span>
-              <span className={shellLabelClass(labelsOpen, shellReady, 'truncate')}>
+              <span
+                className={cn(
+                  'min-w-0 truncate',
+                  labelsOpen
+                    ? 'flex-1 opacity-100'
+                    : 'pointer-events-none w-0 max-w-0 min-w-0 flex-[0_0_0] overflow-hidden opacity-0',
+                  shellReady &&
+                    'transition-opacity duration-150 ease-linear motion-reduce:duration-[0.01ms]',
+                  shellReady &&
+                    labelsOpen &&
+                    'duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]',
+                )}
+              >
                 {item.label}
               </span>
             </Link>
@@ -244,10 +261,10 @@ function ShellChrome({
         })}
       </nav>
 
-      <div className={SHELL_FOOTER}>
-        <hr className={SHELL_FOOTER_RULE} />
+      <div className="relative z-10 mt-auto flex shrink-0 flex-col gap-0 pb-1.5 pt-0">
+        <hr className="pointer-events-none mx-1.5 mt-1.5 mb-1.5 box-border h-0 w-auto shrink-0 border-0 border-t border-black/[0.06] dark:border-white/10" />
         <WorkspaceSwitcher open={labelsOpen} />
-        <hr className={SHELL_FOOTER_RULE} />
+        <hr className="pointer-events-none mx-1.5 mt-1.5 mb-1.5 box-border h-0 w-auto shrink-0 border-0 border-t border-black/[0.06] dark:border-white/10" />
         <UserAccountMenu
           open={labelsOpen}
           displayName={displayName}
@@ -398,17 +415,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-full bg-surface text-ink dark:bg-dark-surface dark:text-dark-ink">
+    <div className="flex h-full bg-background text-foreground">
       {isDesktop ? (
         <aside
           data-state={open ? 'open' : 'closed'}
           data-mode="desktop"
           data-ready={shellReady ? 'true' : 'false'}
           className={cn(
-            SHELL_ASIDE,
-            'relative',
+            'relative box-content z-40 flex h-full shrink-0 flex-col overflow-hidden',
+            'border-0 border-r border-black/5 bg-background dark:border-white/10',
             open ? 'w-(--sidebar-width)' : 'w-(--sidebar-rail)',
-            shellAsideMotion(shellReady),
+            shellReady &&
+              'transition-[width] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-[width] motion-reduce:transition-none motion-reduce:duration-[0.01ms]',
           )}
         >
           <ShellChrome {...chromeProps} />
@@ -421,10 +439,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         >
           <DrawerContent
             side="left"
-            className={cn(
-              'border-r border-r-(length:--sidebar-divider)',
-              'border-r-(--sidebar-divider-color) dark:border-r-(--sidebar-divider-color-dark)',
-            )}
+            className="border-r border-black/5 dark:border-white/10"
           >
             <DrawerTitle className="sr-only">Navigation</DrawerTitle>
             <DrawerDescription className="sr-only">
@@ -439,7 +454,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header
           className={cn(
             'flex shrink-0 items-center gap-1 px-2',
-            !isDesktop ? 'min-h-13 justify-between pt-2' : 'h-2',
+            !isDesktop ? 'min-h-12 justify-between pt-2' : 'h-2',
           )}
         >
           {!isDesktop && (
@@ -488,7 +503,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </span>
             <div className="min-w-0 text-left">
               <p className="truncate text-[16px]">{data.user.displayName}</p>
-              <p className="truncate text-[14px] text-ink-secondary">
+              <p className="truncate text-[14px] text-muted-foreground">
                 {data.user.email}
               </p>
             </div>

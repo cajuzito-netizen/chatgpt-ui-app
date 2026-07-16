@@ -22,7 +22,7 @@ export default function ItemNewRoute() {
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col px-6 py-8">
-      <p className="text-[13px] font-medium text-ink-tertiary">
+      <p className="text-[13px] font-medium text-muted-foreground">
         <Link to={`/w/${id}`} className="hover:underline">
           Home
         </Link>
@@ -32,14 +32,14 @@ export default function ItemNewRoute() {
       <h1 className="mt-1 text-[24px] font-normal tracking-tight">
         Create item
       </h1>
-      <p className="mt-1 text-[14px] text-ink-secondary">
+      <p className="mt-1 text-[14px] text-muted-foreground">
         Generic workspace record — rename to campaign, project, etc. in your
         fork.
       </p>
 
       <form onSubmit={submit} className="mt-8 space-y-4">
         <div>
-          <label className="mb-1 block text-[12px] text-ink-secondary">
+          <label className="mb-1 block text-[12px] text-muted-foreground">
             Title
           </label>
           <Input
@@ -51,7 +51,7 @@ export default function ItemNewRoute() {
           />
         </div>
         <div>
-          <label className="mb-1 block text-[12px] text-ink-secondary">
+          <label className="mb-1 block text-[12px] text-muted-foreground">
             Notes
           </label>
           <textarea
@@ -59,7 +59,7 @@ export default function ItemNewRoute() {
             onChange={(e) => setBody(e.target.value)}
             rows={5}
             placeholder="Optional details"
-            className="w-full resize-none rounded-xl border border-black/10 bg-transparent px-3 py-2 text-[15px] outline-none placeholder:text-ink-tertiary focus:border-black/30 dark:border-white/15 dark:placeholder:text-dark-ink-tertiary"
+            className="w-full resize-none rounded-xl border border-black/10 bg-transparent px-3 py-2 text-[15px] outline-none placeholder:text-muted-foreground focus:border-black/30 dark:border-white/15 dark:placeholder:text-muted-foreground"
           />
         </div>
         <div className="flex gap-2 pt-2">

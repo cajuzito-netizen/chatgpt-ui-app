@@ -105,7 +105,7 @@ export default function AccountSettingsRoute() {
               </button>
             </div>
             <div className="px-3 pb-2">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-ink-tertiary">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                 Account
               </p>
             </div>
@@ -143,7 +143,7 @@ export default function AccountSettingsRoute() {
                     </span>
                     <div>
                       <p className="text-[14px] font-medium">Avatar</p>
-                      <p className="text-[12px] text-ink-secondary">
+                      <p className="text-[12px] text-muted-foreground">
                         Photo upload later — initials for now.
                       </p>
                       <Button
@@ -173,7 +173,7 @@ export default function AccountSettingsRoute() {
                   <div>
                     <Label>Email</Label>
                     <Input value={data.user.email} disabled />
-                    <p className="mt-1 text-[12px] text-ink-tertiary">
+                    <p className="mt-1 text-[12px] text-muted-foreground">
                       Email change belongs in a later auth flow.
                     </p>
                   </div>
@@ -196,7 +196,7 @@ export default function AccountSettingsRoute() {
                   <div className="flex items-start justify-between gap-6 border-b border-black/5 py-4 dark:border-white/10">
                     <div className="min-w-0">
                       <div className="text-[14px] font-medium">Color scheme</div>
-                      <p className="mt-0.5 text-[13px] text-ink-secondary">
+                      <p className="mt-0.5 text-[13px] text-muted-foreground">
                         Light, dark, or match the system.
                       </p>
                     </div>
@@ -212,8 +212,8 @@ export default function AccountSettingsRoute() {
                           className={cn(
                             'rounded-full px-2.5 py-1 text-[12px] font-medium',
                             theme === t.id
-                              ? 'bg-ink text-white dark:bg-white dark:text-ink'
-                              : 'text-ink-secondary hover:text-ink dark:text-dark-ink-secondary',
+                              ? 'bg-primary text-primary-foreground'
+                              : 'text-muted-foreground hover:text-foreground',
                           )}
                         >
                           {t.label}
@@ -225,7 +225,7 @@ export default function AccountSettingsRoute() {
                   <div className="flex items-start justify-between gap-6 border-b border-black/5 py-4 dark:border-white/10">
                     <div className="min-w-0">
                       <div className="text-[14px] font-medium">Language</div>
-                      <p className="mt-0.5 text-[13px] text-ink-secondary">
+                      <p className="mt-0.5 text-[13px] text-muted-foreground">
                         Preferred UI language (demo).
                       </p>
                     </div>
@@ -251,7 +251,7 @@ export default function AccountSettingsRoute() {
 
                   <div className="rounded-xl border border-red-200/80 p-4 mt-4 dark:border-red-900/50">
                     <p className="text-[14px] font-medium">Delete account</p>
-                    <p className="mt-1 text-[13px] text-ink-secondary">
+                    <p className="mt-1 text-[13px] text-muted-foreground">
                       Permanently remove your account and personal data.
                       Workspace data owned solely by you would need a product
                       policy later.
@@ -276,7 +276,7 @@ export default function AccountSettingsRoute() {
           <AlertDialogTitle className="text-left text-[18px] font-semibold">
             Delete account?
           </AlertDialogTitle>
-          <p className="mt-2 text-[14px] text-ink-secondary">
+          <p className="mt-2 text-[14px] text-muted-foreground">
             Demo only — nothing is deleted yet. Wire this to your auth backend
             when ready.
           </p>

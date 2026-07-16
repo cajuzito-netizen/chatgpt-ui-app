@@ -6,20 +6,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
-import {
-  SHELL_AVATAR,
-  SHELL_AVATAR_INITIALS,
-  SHELL_CHEVRON,
-  shellFooterRowClass,
-  shellLabelClass,
-} from '~/components/shell/shell-classes'
 import { cn } from '~/lib/utils'
 
+const AVATAR =
+  'box-border flex size-6 shrink-0 items-center justify-center rounded-full text-center text-[11px] font-medium leading-none pointer-events-none'
+
+const CHEVRON =
+  'h-4 w-4 shrink-0 text-muted-foreground opacity-40 transition-opacity group-hover/ws:opacity-70 group-hover/profile:opacity-70'
+
 /**
- * Live ChatGPT profile control geometry (Patchright):
- * h≈52, pad 6 6 6 8, margin 0 6 0 8, gap 8, radius 10, avatar 24×24
- *
- * Collapsed rail: menu opens to the right with user card on top (like chatgpt.com).
+ * Account footer control. Collapsed rail: menu opens to the right with identity card on top.
  */
 export function UserAccountMenu({
   open,
@@ -46,34 +42,36 @@ export function UserAccountMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          shellFooterRowClass(collapsed),
-          'group/profile pill-focus border-0 bg-transparent text-left',
-          'hover:bg-black/[0.05] dark:hover:bg-white/10',
+          'group/profile box-border flex h-12 min-h-10 cursor-pointer items-center overflow-hidden pointer-events-auto',
+          'ml-2 mr-1.5 w-[calc(100%-0.875rem)] max-w-[calc(100%-0.875rem)]',
+          'rounded-[10px] border-0 bg-transparent py-1.5 pr-1.5 pl-2 text-left',
+          'pill-focus hover:bg-black/[0.05] dark:hover:bg-white/10',
+          collapsed ? 'gap-0' : 'gap-2',
         )}
         aria-label={`Account menu for ${displayName}`}
         aria-haspopup="menu"
       >
-        <span
-          className={cn(
-            SHELL_AVATAR,
-            SHELL_AVATAR_INITIALS,
-            'bg-teal-500 text-white',
-          )}
-          aria-hidden
-        >
+        <span className={cn(AVATAR, 'bg-teal-500 text-white')} aria-hidden>
           {initials}
         </span>
-        <span className={shellLabelClass(open, true, 'text-left')}>
+        <span
+          className={cn(
+            'min-w-0 text-left',
+            open
+              ? 'flex-1 opacity-100'
+              : 'pointer-events-none w-0 max-w-0 min-w-0 flex-[0_0_0] overflow-hidden opacity-0',
+          )}
+        >
           <span className="flex min-w-0 items-center gap-2">
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[14px] font-medium leading-5">
                 {displayName}
               </span>
-              <span className="block truncate text-[12px] leading-4 text-ink-secondary dark:text-dark-ink-secondary">
+              <span className="block truncate text-[12px] leading-4 text-muted-foreground">
                 {email}
               </span>
             </span>
-            <ChevronsUpDown className={SHELL_CHEVRON} aria-hidden />
+            <ChevronsUpDown className={CHEVRON} aria-hidden />
           </span>
         </span>
       </DropdownMenuTrigger>
@@ -83,25 +81,17 @@ export function UserAccountMenu({
         sideOffset={collapsed ? 10 : 8}
         className="w-64"
       >
-        {/* Collapsed rail: identity card at top (live: same mx/radius as items) */}
         {collapsed && (
           <>
             <div className="mx-1.5 flex items-center gap-2 rounded-[10px] px-2.5 py-1.5">
-              <span
-                className={cn(
-                  SHELL_AVATAR,
-                  SHELL_AVATAR_INITIALS,
-                  'bg-teal-500 text-white',
-                )}
-                aria-hidden
-              >
+              <span className={cn(AVATAR, 'bg-teal-500 text-white')} aria-hidden>
                 {initials}
               </span>
               <div className="min-w-0 flex-1 text-left">
                 <p className="truncate text-[14px] font-medium leading-5">
                   {displayName}
                 </p>
-                <p className="truncate text-[12px] leading-4 text-ink-secondary dark:text-dark-ink-secondary">
+                <p className="truncate text-[12px] leading-4 text-muted-foreground">
                   {email}
                 </p>
               </div>

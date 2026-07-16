@@ -98,7 +98,7 @@ export default function WorkspaceSettingsRoute() {
             </button>
           </div>
           <div className="px-3 pb-2">
-            <p className="truncate text-[11px] font-medium uppercase tracking-wide text-ink-tertiary">
+            <p className="truncate text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
               Workspace
             </p>
             <p className="truncate text-[13px] font-medium">{ws?.name}</p>
@@ -146,7 +146,7 @@ export default function WorkspaceSettingsRoute() {
                     Save name
                   </Button>
                 </div>
-                <p className="text-[13px] text-ink-secondary">
+                <p className="text-[13px] text-muted-foreground">
                   Product-specific options (branding, defaults) can land here
                   later.
                 </p>
@@ -155,7 +155,7 @@ export default function WorkspaceSettingsRoute() {
 
             {tab === 'members' && (
               <div className="space-y-4 py-3">
-                <p className="text-[13px] text-ink-secondary">
+                <p className="text-[13px] text-muted-foreground">
                   Invite teammates to this workspace. Roles: owner, admin,
                   user (mock UI — full member model next).
                 </p>
@@ -180,7 +180,7 @@ export default function WorkspaceSettingsRoute() {
                     </Button>
                   </div>
                   {inviteNote && (
-                    <p className="mt-2 text-[13px] text-ink-secondary">
+                    <p className="mt-2 text-[13px] text-muted-foreground">
                       {inviteNote}
                     </p>
                   )}
@@ -210,7 +210,7 @@ export default function WorkspaceSettingsRoute() {
                 {ws?.plan === 'free' ? (
                   <div className="rounded-xl border border-[#2c67c5]/30 bg-[#2c67c5]/[0.06] p-4">
                     <p className="text-[14px] font-medium">Upgrade to Pro</p>
-                    <p className="mt-1 text-[13px] text-ink-secondary">
+                    <p className="mt-1 text-[13px] text-muted-foreground">
                       Demo toggle — wire Stripe (or similar) later.
                     </p>
                     <Button
@@ -225,7 +225,7 @@ export default function WorkspaceSettingsRoute() {
                 ) : (
                   <div className="rounded-xl border border-black/8 p-4 dark:border-white/10">
                     <p className="text-[14px] font-medium">Pro workspace</p>
-                    <p className="mt-1 text-[13px] text-ink-secondary">
+                    <p className="mt-1 text-[13px] text-muted-foreground">
                       Downgrade keeps data; limits apply on next cycle (demo).
                     </p>
                     <Button
@@ -246,7 +246,7 @@ export default function WorkspaceSettingsRoute() {
               <div className="space-y-4 py-3">
                 <div className="rounded-xl border border-black/8 p-4 dark:border-white/10">
                   <p className="text-[14px] font-medium">Transfer ownership</p>
-                  <p className="mt-1 text-[13px] text-ink-secondary">
+                  <p className="mt-1 text-[13px] text-muted-foreground">
                     Hand this workspace to another member. Invite someone first
                     (demo — transfer unlocks when members exist).
                   </p>
@@ -256,7 +256,7 @@ export default function WorkspaceSettingsRoute() {
                 </div>
                 <div className="rounded-xl border border-red-200/80 p-4 dark:border-red-900/50">
                   <p className="text-[14px] font-medium">Delete workspace</p>
-                  <p className="mt-1 text-[13px] text-ink-secondary">
+                  <p className="mt-1 text-[13px] text-muted-foreground">
                     Permanently removes this workspace and its local data. You
                     must keep at least one workspace.
                   </p>
@@ -296,7 +296,7 @@ function Row({
       <div className="min-w-0">
         <div className="text-[14px] font-medium">{title}</div>
         {description && (
-          <p className="mt-0.5 text-[13px] leading-snug text-ink-secondary dark:text-dark-ink-secondary">
+          <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground ">
             {description}
           </p>
         )}

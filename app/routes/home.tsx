@@ -17,7 +17,7 @@ export default function Home() {
   }, [navigate, data.activeWorkspaceId])
 
   return (
-    <div className="flex flex-1 items-center justify-center text-ink-secondary">
+    <div className="flex flex-1 items-center justify-center text-muted-foreground">
       Loading…
     </div>
   )

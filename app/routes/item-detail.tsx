@@ -38,12 +38,12 @@ export default function ItemDetailRoute() {
     return (
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center px-6 py-16 text-center">
         <p className="text-[16px] font-medium">Item not found</p>
-        <p className="mt-1 text-[14px] text-ink-secondary">
+        <p className="mt-1 text-[14px] text-muted-foreground">
           It may have been deleted or belongs to another workspace.
         </p>
         <Link
           to={`/w/${id}/items`}
-          className="mt-4 text-[14px] font-medium text-link hover:underline dark:text-dark-link"
+          className="mt-4 text-[14px] font-medium text-blue-700 hover:underline dark:text-blue-400"
         >
           Back to items
         </Link>
@@ -53,14 +53,14 @@ export default function ItemDetailRoute() {
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col px-6 py-8">
-      <p className="text-[13px] font-medium text-ink-tertiary">
+      <p className="text-[13px] font-medium text-muted-foreground">
         <Link to={`/w/${id}/items`} className="hover:underline">
           Items
         </Link>
         <span className="mx-1.5 opacity-40">/</span>
-        <span className="text-ink dark:text-dark-ink">{item.title}</span>
+        <span className="text-foreground ">{item.title}</span>
       </p>
-      <p className="mt-2 text-[12px] text-ink-tertiary">
+      <p className="mt-2 text-[12px] text-muted-foreground">
         Updated {formatRelative(item.updatedAt)}
       </p>
 
@@ -95,7 +95,7 @@ export default function ItemDetailRoute() {
             Delete
           </Button>
           {saved && (
-            <span className="text-[13px] text-ink-secondary">Saved</span>
+            <span className="text-[13px] text-muted-foreground">Saved</span>
           )}
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function ItemDetailRoute() {
           <AlertDialogTitle className="text-left text-[18px] font-semibold">
             Delete this item?
           </AlertDialogTitle>
-          <p className="mt-2 text-[14px] text-ink-secondary">
+          <p className="mt-2 text-[14px] text-muted-foreground">
             “{item.title}” will be removed from this workspace. This cannot be
             undone in the local demo.
           </p>

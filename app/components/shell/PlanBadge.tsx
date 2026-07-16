@@ -11,7 +11,7 @@ const base =
   'inline-flex shrink-0 items-center rounded-md px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide'
 
 const freeCls =
-  'bg-black/[0.06] text-ink-tertiary dark:bg-white/10 dark:text-dark-ink-tertiary'
+  'bg-black/[0.06] text-muted-foreground dark:bg-white/10 '
 const proCls =
   'bg-[#2c67c5]/12 text-[#2c67c5] dark:bg-[#2c67c5]/20 dark:text-[#7ab7ff]'
 

@@ -6,31 +6,7 @@
   --font-sans: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica,
     Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
 
-  /* Product / ChatGPT-like tokens */
-  --color-surface: #fcfcfc;
-  --color-surface-secondary: #f9f9f9;
-  --color-surface-tertiary: #f3f3f3;
-  --color-ink: #0d0d0d;
-  --color-ink-secondary: #5d5d5d;
-  --color-ink-tertiary: #8f8f8f;
-  --color-border-soft: #0000000d;
-  --color-border-mid: #00000026;
-  --color-link: #2964aa;
-  --color-scrim: #00000080;
-
-  --color-dark-surface: #000000;
-  --color-dark-surface-secondary: #212121;
-  --color-dark-ink: #ffffff;
-  --color-dark-ink-secondary: #cdcdcd;
-  --color-dark-ink-tertiary: #afafaf;
-  --color-dark-border-mid: #ffffff26;
-  --color-dark-link: #7ab7ff;
-
-  /*
-   * shadcn semantic tokens → mapped to our palette.
-   * Lets ui/* use bg-primary / text-muted-foreground etc. like shadcn,
-   * so a stock shadcn component file can drop in and still render.
-   */
+  /* shadcn semantics (ChatGPT-like neutrals) */
   --color-background: #fcfcfc;
   --color-foreground: #0d0d0d;
   --color-card: #ffffff;
@@ -54,53 +30,9 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
 
-  /*
-   * Live chatgpt.com (Patchright 2026-07-16, signed-in, sidebar OPEN)
-   * Source: out-patchright/live-measure + hover-compare-now/ref-data.json
-   *
-   * Sidebar: 260 × full, border-e 1px rgba(0,0,0,0.05)
-   * Rail: 52px (calc(13 * .25rem))
-   * Nav __menu-item: m 0 6, p 6 10, h 36, gap 6 icon↔label, r 10; rows flush
-   * Profile __menu-item: m 0 6 0 8, p 6 6 6 8, h≈52 min 40, gap 8, r 10, avatar 24
-   * Profile footer wrap: pt-2 pb-1.5 (8px / 6px) — profile bottom sits 6px above edge
-   * Brand control: ~8px inset, 36×36; first nav ≈ y:60
-   */
+  /* Shell width only — row geometry in shell components (see docs/shell-metrics.md) */
   --sidebar-width: 260px;
   --sidebar-rail: 52px;
-  --sidebar-divider: 1px;
-  --sidebar-divider-color: rgba(0, 0, 0, 0.05);
-  --sidebar-divider-color-dark: rgba(255, 255, 255, 0.1);
-
-  /* Nav __menu-item */
-  --nav-mx: 6px;
-  --nav-py: 6px;
-  --nav-px: 10px;
-  --nav-h: 36px;
-  --nav-gap: 6px; /* gap-1.5 icon ↔ label */
-  --nav-stack-gap: 1px; /* 1px room between nav rows */
-  --nav-radius: 10px;
-  --nav-icon: 20px;
-
-  /* Profile __menu-item (expanded) — workspace + user share this */
-  --profile-h: 52px;
-  --profile-min-h: 40px;
-  --profile-pt: 6px;
-  --profile-pr: 6px;
-  --profile-pb: 6px;
-  --profile-pl: 8px;
-  --profile-ml: 8px; /* ms-2 */
-  --profile-mr: 6px; /* me-1.5 */
-  --profile-gap: 8px; /* gap-2 */
-  --profile-radius: 10px;
-  --profile-avatar: 24px;
-
-  /*
-   * Footer card spacing (same on every side of both cards):
-   *   gap above card = gap below card = --footer-gap
-   * User: separator → gap → card → gap → page bottom
-   * Workspace: (footer top) → gap → card → gap → separator
-   */
-  --footer-gap: 6px;
 }
 
 html,
@@ -110,12 +42,12 @@ body,
   margin: 0;
 }
 
-/* Base UI: portals stack above app; iOS backdrops need relative body */
+/* Base UI portals / iOS backdrops need relative body */
 body {
   position: relative;
   font-family: var(--font-sans);
-  background: var(--color-surface);
-  color: var(--color-ink);
+  background: var(--color-background);
+  color: var(--color-foreground);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -124,13 +56,7 @@ body {
   height: 100%;
 }
 
-.dark body,
-html.dark body {
-  background: var(--color-dark-surface);
-  color: var(--color-dark-ink);
-}
-
-/* Dark: remaps shadcn semantics when .dark is on <html> */
+/* Dark: remap shadcn tokens when .dark is on <html> */
 .dark {
   --color-background: #000000;
   --color-foreground: #ffffff;
@@ -162,6 +88,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Resize cursors used by shell rail (Tailwind utilities alone lose to button defaults) */
 button:not(:disabled).cursor-default,
 .cursor-default {
   cursor: default;
@@ -173,38 +100,11 @@ button:not(:disabled).cursor-w-resize,
 }
 
 button:not(:disabled).cursor-e-resize,
-aside.cursor-e-resize,
 .cursor-e-resize {
   cursor: e-resize;
 }
 
 .pill-focus:focus-visible {
-  outline: 1.5px solid var(--color-ink);
+  outline: 1.5px solid var(--color-foreground);
   outline-offset: 2px;
-}
-
-.dark .pill-focus:focus-visible {
-  outline-color: var(--color-dark-ink);
-}
-
-.h-13 {
-  height: 3.25rem;
-}
-
-.min-h-13 {
-  min-height: 3.25rem;
-}
-
-/* Shell geometry: Tailwind in shell/* using @theme tokens above (--sidebar-*, --nav-*, --profile-*) */
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
 }

@@ -52,7 +52,7 @@ export function SupportDialog({
       >
         <div className="border-b border-black/5 px-5 py-4 dark:border-white/10">
           <DialogTitle>Support</DialogTitle>
-          <p className="mt-1 text-[13px] text-ink-secondary">
+          <p className="mt-1 text-[13px] text-muted-foreground">
             Send a short message. Past tickets stay on this device until you
             wire a helpdesk.
           </p>
@@ -89,7 +89,7 @@ export function SupportDialog({
 
           {tickets.length > 0 && (
             <div>
-              <h3 className="mb-2 text-[11px] font-medium uppercase tracking-wide text-ink-tertiary">
+              <h3 className="mb-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                 Previous
               </h3>
               <ul className="space-y-1">
@@ -99,11 +99,11 @@ export function SupportDialog({
                     className="rounded-xl border border-black/8 px-3 py-2.5 dark:border-white/10"
                   >
                     <p className="truncate text-[13px] font-medium">{t.subject}</p>
-                    <p className="mt-0.5 text-[11px] text-ink-tertiary">
+                    <p className="mt-0.5 text-[11px] text-muted-foreground">
                       {formatShortDate(t.createdAt)}
                     </p>
                     {t.body ? (
-                      <p className="mt-1 line-clamp-2 text-[12px] text-ink-secondary">
+                      <p className="mt-1 line-clamp-2 text-[12px] text-muted-foreground">
                         {t.body}
                       </p>
                     ) : null}

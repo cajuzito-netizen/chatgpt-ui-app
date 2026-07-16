@@ -20,13 +20,13 @@ export default function ItemsRoute() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-[24px] font-normal tracking-tight">Items</h1>
-          <p className="mt-1 text-[14px] text-ink-secondary">
+          <p className="mt-1 text-[14px] text-muted-foreground">
             Everything in this workspace. {items.length} total.
           </p>
         </div>
         <Link
           to={`/w/${id}/new`}
-          className="pill-focus inline-flex h-10 items-center gap-2 rounded-full bg-ink px-4 text-[14px] font-medium text-white hover:bg-[#212121] dark:bg-white dark:text-ink"
+          className="pill-focus inline-flex h-10 items-center gap-2 rounded-full bg-primary px-4 text-[14px] font-medium text-primary-foreground hover:bg-primary/90"
         >
           <Plus className="h-4 w-4" strokeWidth={1.75} />
           New item
@@ -36,7 +36,7 @@ export default function ItemsRoute() {
       {items.length === 0 ? (
         <div className="mt-8 rounded-2xl border border-dashed border-black/10 px-6 py-12 text-center dark:border-white/15 sm:mt-10 sm:py-14">
           <p className="text-[15px] font-medium">No items yet</p>
-          <p className="mt-1 text-[13px] text-ink-secondary">
+          <p className="mt-1 text-[13px] text-muted-foreground">
             Create one to populate this list.
           </p>
           <Link
@@ -61,12 +61,12 @@ export default function ItemsRoute() {
                 <div className="min-w-0">
                   <p className="truncate text-[14px] font-medium">{item.title}</p>
                   {item.body ? (
-                    <p className="mt-0.5 truncate text-[13px] text-ink-secondary">
+                    <p className="mt-0.5 truncate text-[13px] text-muted-foreground">
                       {item.body}
                     </p>
                   ) : null}
                 </div>
-                <span className="shrink-0 text-[12px] text-ink-tertiary">
+                <span className="shrink-0 text-[12px] text-muted-foreground">
                   {formatRelative(item.updatedAt)}
                 </span>
               </Link>
