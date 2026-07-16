@@ -1,6 +1,6 @@
 /**
- * shadcn-compatible Switch over Base UI.
- * API matches ui.shadcn.com `switch` (size: sm | default).
+ * Switch — Base UI Root + Thumb. data-checked / data-unchecked for styles.
+ * @see https://base-ui.com/react/components/switch
  */
 import { Switch as SwitchPrimitive } from '@base-ui/react/switch'
 import { cn } from '~/lib/utils'
@@ -10,6 +10,7 @@ function Switch({
   size = 'default',
   ...props
 }: SwitchPrimitive.Root.Props & {
+  /** Local size convention (shadcn-compatible); not a Base UI prop. */
   size?: 'sm' | 'default'
 }) {
   return (
@@ -17,8 +18,8 @@ function Switch({
       data-slot="switch"
       data-size={size}
       className={cn(
-        'peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent outline-none transition-all',
-        'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+        'peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent outline-none transition-colors',
+        'focus-visible:ring-2 focus-visible:ring-ring/50',
         'data-checked:bg-primary data-unchecked:bg-input',
         'data-disabled:cursor-not-allowed data-disabled:opacity-50',
         'data-[size=default]:h-6 data-[size=default]:w-11',

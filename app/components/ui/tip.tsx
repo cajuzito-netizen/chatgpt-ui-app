@@ -1,6 +1,6 @@
 /**
- * App-level tooltip helper — always-dark ChatGPT-style chip.
- * Prefer this over raw Tooltip for shell icon labels.
+ * App helper on top of Tooltip (not a Base UI part).
+ * Renders trigger as <span> via Base UI `render` so shell icons aren't nested buttons.
  */
 import type { ReactNode } from 'react'
 import {
@@ -27,7 +27,6 @@ function Tip({
   className?: string
   children: ReactNode
 }) {
-  /* Keep tree stable so enable/disable does not remount children. */
   return (
     <Tooltip disabled={disabled}>
       <TooltipTrigger
@@ -39,12 +38,15 @@ function Tip({
       <TooltipContent side={side} sideOffset={4}>
         <span>{content}</span>
         {shortcut && shortcut.length === 1 ? (
-          <kbd className="ml-1 inline-flex h-4 min-w-4 items-center justify-center rounded bg-[#414141] text-[11px] font-medium text-[#afafaf]">
+          <kbd
+            data-slot="kbd"
+            className="ml-1 inline-flex h-4 min-w-4 items-center justify-center rounded bg-background/15 px-0.5 text-[11px] font-medium text-background/70"
+          >
             {shortcut[0]}
           </kbd>
         ) : null}
         {shortcut && shortcut.length > 1 ? (
-          <span className="ml-1 text-[12px] font-medium text-[#afafaf]">
+          <span className="ml-1 text-[12px] font-medium text-background/70">
             {shortcut.join(' + ')}
           </span>
         ) : null}

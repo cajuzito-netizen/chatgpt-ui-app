@@ -20,13 +20,14 @@ app/
 ### Rules
 
 1. **Shell is protected.** Do not replace `AppShell` with shadcn Sidebar kits.
-2. **UI kit is shadcn-parallel** (`app/components/ui/*` over Base UI).
-   - Same **file names**, **exports**, and **props** as [shadcn/ui (base)](https://ui.shadcn.com).
-   - Import like shadcn: `import { Button } from '~/components/ui/button'`.
-   - Prefer `DropdownMenu*` (not legacy `Menu*`). Prefer `Tip` for shell tooltips.
-   - **Swap contract:** you can replace e.g. `ui/button.tsx` with an official
-     shadcn file and call sites keep working (API + Base UI). Only styles/tokens
-     may change. Theme bridge lives in `app/app.css` (`--color-primary`, etc.).
+2. **UI kit** (`app/components/ui/*`) — Base UI first, shadcn-compatible outside.
+   - **Internals:** follow [Base UI docs](https://base-ui.com) (parts, `render`,
+     `data-starting-style` / `data-ending-style`, `data-highlighted`, etc.).
+   - **Externals:** same file names, exports, and prop surface as shadcn/ui so
+     examples and call sites are interchangeable (`import { Button } from '~/components/ui/button'`).
+   - Do **not** copy shadcn internals or dead `animate-in` classes; re-implement
+     with Base UI best practices + our design tokens (`app/app.css`).
+   - Prefer `DropdownMenu*`; prefer `Tip` for shell icon tooltips.
    - Do not invent one-off modals/menus outside `ui/*`.
 3. **Workspaces first-class.** Data under `/w/:workspaceId/...`. Plan is per workspace.
 4. **Settings:** workspace menu → **Workspace settings** only.

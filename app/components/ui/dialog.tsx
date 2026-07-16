@@ -1,3 +1,8 @@
+/**
+ * Dialog — Base UI anatomy (Root / Trigger / Portal / Backdrop / Popup / Title / Description / Close).
+ * External names match shadcn for drop-in usage; implementation follows Base UI docs.
+ * @see https://base-ui.com/react/components/dialog
+ */
 import * as React from 'react'
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { X } from 'lucide-react'
@@ -28,7 +33,9 @@ function DialogOverlay({
       data-slot="dialog-overlay"
       className={cn(
         'fixed inset-0 z-50 min-h-dvh bg-black/40 transition-opacity duration-150',
+        /* Base UI enter/exit (not tailwindcss-animate) */
         'data-starting-style:opacity-0 data-ending-style:opacity-0',
+        /* iOS 26+ visual viewport — Base UI docs */
         'supports-[-webkit-touch-callout:none]:absolute',
         className,
       )}
@@ -50,9 +57,8 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           'fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2',
-          'rounded-2xl bg-white p-5 shadow-2xl outline-none',
-          'dark:bg-dark-surface-secondary',
-          'transition-[scale,opacity] duration-100 ease-out',
+          'rounded-2xl bg-popover p-5 text-popover-foreground shadow-2xl outline-none',
+          'origin-center transition-[opacity,transform] duration-150 ease-out',
           'data-starting-style:scale-[0.98] data-starting-style:opacity-0',
           'data-ending-style:scale-[0.98] data-ending-style:opacity-0',
           className,
@@ -63,10 +69,15 @@ function DialogContent({
         {showCloseButton ? (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-3 right-3 rounded-lg p-1.5 text-ink-secondary hover:bg-black/5 hover:text-ink dark:text-dark-ink-secondary dark:hover:bg-white/10 dark:hover:text-white"
+            className={cn(
+              'absolute top-3 right-3 inline-flex size-8 items-center justify-center rounded-lg',
+              'text-muted-foreground outline-none',
+              'hover:bg-muted hover:text-foreground',
+              'focus-visible:ring-2 focus-visible:ring-ring/50',
+            )}
             aria-label="Close"
           >
-            <X className="h-4 w-4" />
+            <X className="size-4" />
           </DialogPrimitive.Close>
         ) : null}
       </DialogPrimitive.Popup>
@@ -97,10 +108,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function DialogTitle({
-  className,
-  ...props
-}: DialogPrimitive.Title.Props) {
+function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
@@ -117,10 +125,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn(
-        'text-sm text-ink-secondary dark:text-dark-ink-secondary',
-        className,
-      )}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   )

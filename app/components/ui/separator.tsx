@@ -1,3 +1,7 @@
+/**
+ * Separator — Base UI. Prefer data-orientation from the primitive.
+ * @see https://base-ui.com/react/components/separator
+ */
 import { Separator as SeparatorPrimitive } from '@base-ui/react/separator'
 import { cn } from '~/lib/utils'
 
@@ -11,8 +15,9 @@ function Separator({
       data-slot="separator"
       orientation={orientation}
       className={cn(
-        'shrink-0 bg-black/10 dark:bg-white/10',
-        orientation === 'horizontal' ? 'h-px w-full' : 'h-full w-px',
+        'shrink-0 bg-border',
+        'data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full',
+        'data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px',
         className,
       )}
       {...props}

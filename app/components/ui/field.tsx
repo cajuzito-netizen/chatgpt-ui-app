@@ -1,3 +1,8 @@
+/**
+ * Field — Base UI labeling + validation group.
+ * Prefer this over bare Label+Input when building login/invite forms.
+ * @see https://base-ui.com/react/components/field
+ */
 import { Field as FieldPrimitive } from '@base-ui/react/field'
 import { cn } from '~/lib/utils'
 
@@ -16,7 +21,7 @@ function FieldLabel({ className, ...props }: FieldPrimitive.Label.Props) {
     <FieldPrimitive.Label
       data-slot="field-label"
       className={cn(
-        'text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary',
+        'text-[12px] font-medium text-muted-foreground',
         className,
       )}
       {...props}
@@ -31,23 +36,17 @@ function FieldDescription({
   return (
     <FieldPrimitive.Description
       data-slot="field-description"
-      className={cn(
-        'text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary',
-        className,
-      )}
+      className={cn('text-[12px] text-muted-foreground', className)}
       {...props}
     />
   )
 }
 
-function FieldError({
-  className,
-  ...props
-}: FieldPrimitive.Error.Props) {
+function FieldError({ className, ...props }: FieldPrimitive.Error.Props) {
   return (
     <FieldPrimitive.Error
       data-slot="field-error"
-      className={cn('text-[12px] text-red-600 dark:text-red-400', className)}
+      className={cn('text-[12px] text-destructive', className)}
       {...props}
     />
   )
@@ -58,11 +57,10 @@ function FieldControl({ className, ...props }: FieldPrimitive.Control.Props) {
     <FieldPrimitive.Control
       data-slot="field-control"
       className={cn(
-        'flex h-11 w-full rounded-xl border border-black/10 bg-transparent px-3 text-[15px] outline-none',
-        'placeholder:text-ink-tertiary focus:border-black/30',
+        'flex h-11 w-full rounded-xl border border-input bg-transparent px-3 text-[15px] outline-none',
+        'placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        'dark:border-white/15 dark:placeholder:text-dark-ink-tertiary dark:focus:border-white/30',
-        'data-invalid:border-red-400 dark:data-invalid:border-red-500',
+        'data-invalid:border-destructive',
         className,
       )}
       {...props}

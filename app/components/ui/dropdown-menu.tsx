@@ -1,12 +1,15 @@
 /**
- * shadcn-compatible Dropdown Menu over Base UI Menu.
- * API matches ui.shadcn.com (base) `dropdown-menu` so this file can be
- * swapped with an official shadcn copy without changing call sites.
+ * Dropdown Menu — Base UI Menu parts under shadcn export names.
+ * Animation uses Base UI data-starting-style / data-ending-style (docs), not animate-in.
+ * @see https://base-ui.com/react/components/menu
  */
 import * as React from 'react'
 import { Menu as MenuPrimitive } from '@base-ui/react/menu'
 import { CheckIcon, ChevronRightIcon } from 'lucide-react'
 import { cn } from '~/lib/utils'
+
+const popupMotion =
+  'origin-[var(--transform-origin)] transition-[opacity,transform] duration-100 ease-out data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:opacity-0'
 
 function DropdownMenu(props: MenuPrimitive.Root.Props) {
   return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />
@@ -46,12 +49,10 @@ function DropdownMenuContent({
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
           className={cn(
-            'z-50 max-h-(--available-height) min-w-56 origin-(--transform-origin)',
-            'overflow-x-hidden overflow-y-auto rounded-2xl border border-border',
-            'bg-popover py-1.5 text-popover-foreground shadow-[0_8px_30px_rgba(0,0,0,0.12)]',
-            'outline-none duration-100',
-            'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
-            'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+            'z-50 max-h-[var(--available-height)] min-w-56 overflow-x-hidden overflow-y-auto',
+            'rounded-2xl border border-border bg-popover py-1.5 text-popover-foreground',
+            'shadow-[0_8px_30px_rgba(0,0,0,0.12)] outline-none',
+            popupMotion,
             className,
           )}
           {...props}
@@ -73,7 +74,7 @@ function DropdownMenuLabel({
   return (
     <MenuPrimitive.GroupLabel
       data-slot="dropdown-menu-label"
-      data-inset={inset}
+      data-inset={inset || undefined}
       className={cn(
         'px-3.5 py-1.5 text-[12px] font-medium text-muted-foreground',
         'data-inset:pl-8',
@@ -96,17 +97,18 @@ function DropdownMenuItem({
   return (
     <MenuPrimitive.Item
       data-slot="dropdown-menu-item"
-      data-inset={inset}
+      data-inset={inset || undefined}
       data-variant={variant}
       className={cn(
-        'group/dropdown-menu-item relative flex cursor-pointer items-center gap-1.5',
-        'mx-1.5 rounded-[10px] px-2.5 py-1.5 text-[14px] leading-5 outline-none select-none',
+        'relative flex cursor-pointer items-center gap-1.5 outline-none select-none',
+        'mx-1.5 rounded-[10px] px-2.5 py-1.5 text-[14px] leading-5',
+        /* Base UI highlight (keyboard + pointer) */
         'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         'data-inset:pl-8',
         'data-[variant=destructive]:text-destructive',
         'data-[variant=destructive]:data-highlighted:bg-destructive/10',
-        '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',
+        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -127,14 +129,14 @@ function DropdownMenuSubTrigger({
   return (
     <MenuPrimitive.SubmenuTrigger
       data-slot="dropdown-menu-sub-trigger"
-      data-inset={inset}
+      data-inset={inset || undefined}
       className={cn(
-        'flex cursor-default items-center gap-1.5 rounded-[10px] px-2.5 py-1.5 mx-1.5',
-        'text-[14px] outline-none select-none',
+        'flex cursor-default items-center gap-1.5 outline-none select-none',
+        'mx-1.5 rounded-[10px] px-2.5 py-1.5 text-[14px]',
         'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
         'data-popup-open:bg-accent data-popup-open:text-accent-foreground',
         'data-inset:pl-8',
-        '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',
+        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -145,14 +147,23 @@ function DropdownMenuSubTrigger({
   )
 }
 
+/** Nested popup — Base UI submenu defaults (side right). */
 function DropdownMenuSubContent({
   className,
+  align = 'start',
+  alignOffset = -3,
+  side = 'right',
+  sideOffset = 0,
   ...props
 }: React.ComponentProps<typeof DropdownMenuContent>) {
   return (
     <DropdownMenuContent
       data-slot="dropdown-menu-sub-content"
       className={cn('min-w-[8rem]', className)}
+      align={align}
+      alignOffset={alignOffset}
+      side={side}
+      sideOffset={sideOffset}
       {...props}
     />
   )
@@ -168,10 +179,10 @@ function DropdownMenuCheckboxItem({
   return (
     <MenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
-      data-inset={inset}
+      data-inset={inset || undefined}
       className={cn(
-        'relative flex cursor-pointer items-center gap-1.5 rounded-[10px]',
-        'mx-1.5 py-1.5 pr-8 pl-2.5 text-[14px] outline-none select-none',
+        'relative flex cursor-pointer items-center gap-1.5 outline-none select-none',
+        'mx-1.5 rounded-[10px] py-1.5 pr-8 pl-2.5 text-[14px]',
         'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         'data-inset:pl-8',
@@ -208,10 +219,10 @@ function DropdownMenuRadioItem({
   return (
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
-      data-inset={inset}
+      data-inset={inset || undefined}
       className={cn(
-        'relative flex cursor-pointer items-center gap-1.5 rounded-[10px]',
-        'mx-1.5 py-1.5 pr-8 pl-2.5 text-[14px] outline-none select-none',
+        'relative flex cursor-pointer items-center gap-1.5 outline-none select-none',
+        'mx-1.5 rounded-[10px] py-1.5 pr-8 pl-2.5 text-[14px]',
         'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         'data-inset:pl-8',
