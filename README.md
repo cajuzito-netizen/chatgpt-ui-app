@@ -19,8 +19,8 @@ like an email sender, CRM, or internal tool.
 
 ```bash
 cd chatgpt-ui-app
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Features (v1)

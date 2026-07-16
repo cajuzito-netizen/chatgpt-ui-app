@@ -7,3 +7,5 @@
 /build/
 *.local
 .vite/
+package-lock.json
+yarn.lock
