@@ -34,9 +34,10 @@ export function PlanBadge({
 }
 
 /**
- * Clickable Free badge → upgrade.
- * Renders a <span role="button"> (not <button>) so it can sit inside
- * DropdownMenuTrigger without nested-button DOM thrash / load flicker.
+ * Clickable Free chip → upgrade.
+ * Always a <span> (never <button>) so it can sit above a menu-trigger
+ * overlay without nested buttons. Callers should give it pointer-events
+ * and a higher z-index than the menu hit target.
  */
 export const FreeUpgradeBadge = forwardRef<
   HTMLSpanElement,
@@ -51,23 +52,37 @@ export const FreeUpgradeBadge = forwardRef<
     }
   }
 
+  function handleClick(e: MouseEvent<HTMLSpanElement>) {
+    e.preventDefault()
+    e.stopPropagation()
+    onClick?.(e)
+  }
+
   return (
     <span
       ref={ref}
       role="button"
       tabIndex={0}
+      {...props}
       className={cn(
         base,
         freeCls,
-        'pointer-events-auto cursor-pointer transition-colors select-none',
+        'cursor-pointer transition-colors select-none',
         'hover:bg-[#2c67c5]/12 hover:text-[#2c67c5]',
         'dark:hover:bg-[#2c67c5]/20 dark:hover:text-[#7ab7ff]',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#2c67c5]',
         className,
       )}
-      onClick={onClick}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
-      {...props}
+      onPointerDown={(e) => {
+        e.stopPropagation()
+        props.onPointerDown?.(e)
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation()
+        props.onMouseDown?.(e)
+      }}
     >
       Free
     </span>

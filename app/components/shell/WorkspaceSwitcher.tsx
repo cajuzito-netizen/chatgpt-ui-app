@@ -27,8 +27,11 @@ import { useAppStore } from '~/lib/use-store'
 import { cn } from '~/lib/utils'
 
 /**
- * Same profile-card geometry as live ChatGPT user control.
- * Free is nested (pointer-events restored) for Upgrade.
+ * Workspace footer card.
+ *
+ * Layout rule: never nest interactive controls inside DropdownMenuTrigger.
+ * The trigger is an absolute <div> overlay; the Free upgrade chip sits above
+ * it with pointer-events so Free/Pro share the same single-line chrome.
  */
 export function WorkspaceSwitcher({ open }: { open: boolean }) {
   const data = useAppStore()
@@ -57,10 +60,6 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
     navigate(`/w/${workspaceId}/settings?tab=plan`)
   }
 
-  function isolateFromMenu(e: SyntheticEvent) {
-    e.stopPropagation()
-  }
-
   function onCreate() {
     const ws = createWorkspace(name)
     setName('')
@@ -72,55 +71,57 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
     <>
       <DropdownMenu>
         {/*
-          Render as <div>, not <button>: Free plan nests an upgrade chip that
-          is itself interactive — button-in-button is invalid HTML and breaks
-          layout after the Base UI / DropdownMenu swap.
-          Label visibility is CSS [data-state] only (no remount thrash).
+          Outer row is layout only (not a button).
+          Menu trigger = full-size absolute div (role=button via Base UI).
+          Free chip sits above (z-20) with its own clicks.
         */}
-        <DropdownMenuTrigger
-          nativeButton={false}
-          render={<div />}
+        <div
           className={cn(
             SIDEBAR_FOOTER_ROW,
-            'group/ws pill-focus cursor-pointer border-0 bg-transparent text-left outline-none',
+            'group/ws relative',
             'hover:bg-black/[0.05] dark:hover:bg-white/10',
           )}
-          aria-label={`Workspace: ${active?.name ?? 'Workspace'} (${plan})`}
-          aria-haspopup="menu"
         >
-          <span className={SIDEBAR_FOOTER_WS_MARK} aria-hidden>
+          <DropdownMenuTrigger
+            nativeButton={false}
+            render={
+              <div
+                className={cn(
+                  'absolute inset-0 z-10 rounded-[inherit] outline-none',
+                  'pill-focus cursor-pointer',
+                )}
+              />
+            }
+            aria-label={`Workspace: ${active?.name ?? 'Workspace'} (${plan})`}
+            aria-haspopup="menu"
+          />
+
+          {/* Visual layer — ignores clicks except Free chip */}
+          <span
+            className={cn(SIDEBAR_FOOTER_WS_MARK, 'relative z-[11] pointer-events-none')}
+            aria-hidden
+          >
             {letter}
           </span>
+
           <span
             className={cn(
-              'sidebar-label min-w-0 flex-1',
+              'sidebar-label relative z-[11] min-w-0 flex-1 pointer-events-none',
               open && 'sidebar-label--expanded',
             )}
           >
             <span className="flex min-w-0 items-center gap-2">
-              <span className="min-w-0 flex-1 text-left">
-                <span className="block truncate text-[14px] font-medium leading-5">
-                  {active?.name ?? 'Workspace'}
-                </span>
-                {plan === 'pro' && (
-                  <span className="block truncate text-[12px] leading-4 text-ink-secondary dark:text-dark-ink-secondary">
-                    Pro
-                  </span>
-                )}
+              <span className="min-w-0 flex-1 truncate text-left text-[14px] font-medium leading-5">
+                {active?.name ?? 'Workspace'}
               </span>
-              {plan === 'free' && (
+
+              {plan === 'free' ? (
                 <Tooltip>
-                  {/*
-                    Free chip is a <span role="button"> (FreeUpgradeBadge), not
-                    a <button>, so it can live inside the trigger div.
-                  */}
                   <TooltipTrigger
                     render={
                       <FreeUpgradeBadge
                         aria-label="Upgrade workspace plan"
-                        className="pointer-events-auto relative z-10"
-                        onPointerDown={isolateFromMenu}
-                        onMouseDown={isolateFromMenu}
+                        className="pointer-events-auto relative z-20"
                         onClick={openUpgrade}
                       />
                     }
@@ -129,11 +130,18 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
                     Upgrade
                   </TooltipContent>
                 </Tooltip>
+              ) : (
+                <PlanBadge plan="pro" className="pointer-events-none" />
               )}
-              <ChevronsUpDown className={SIDEBAR_CHEVRON} aria-hidden />
+
+              <ChevronsUpDown
+                className={cn(SIDEBAR_CHEVRON, 'pointer-events-none')}
+                aria-hidden
+              />
             </span>
           </span>
-        </DropdownMenuTrigger>
+        </div>
+
         <DropdownMenuContent side="top" align="start" className="w-72">
           <DropdownMenuItem onClick={openSettings}>
             <Settings
