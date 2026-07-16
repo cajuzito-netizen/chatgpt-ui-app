@@ -1,19 +1,24 @@
+/**
+ * shadcn-compatible Input over Base UI.
+ * API matches ui.shadcn.com `input` (native input props + className).
+ */
+import * as React from 'react'
 import { Input as InputPrimitive } from '@base-ui/react/input'
 import { cn } from '~/lib/utils'
 
-function Input({ className, type, ...props }: InputPrimitive.Props) {
+function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (
     <InputPrimitive
       type={type}
       data-slot="input"
       className={cn(
-        'flex h-11 w-full min-w-0 rounded-xl border border-black/10 bg-transparent px-3 text-[15px]',
+        'flex h-11 w-full min-w-0 rounded-xl border border-input bg-transparent px-3 text-[15px]',
         'outline-none transition-colors',
-        'placeholder:text-ink-tertiary',
-        'focus:border-black/30',
+        'file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
+        'placeholder:text-muted-foreground',
+        'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30',
         'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-        'dark:border-white/15 dark:placeholder:text-dark-ink-tertiary dark:focus:border-white/30',
-        'file:border-0 file:bg-transparent file:text-sm file:font-medium',
+        'aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20',
         className,
       )}
       {...props}

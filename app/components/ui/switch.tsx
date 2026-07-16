@@ -1,16 +1,28 @@
+/**
+ * shadcn-compatible Switch over Base UI.
+ * API matches ui.shadcn.com `switch` (size: sm | default).
+ */
 import { Switch as SwitchPrimitive } from '@base-ui/react/switch'
 import { cn } from '~/lib/utils'
 
-function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
+function Switch({
+  className,
+  size = 'default',
+  ...props
+}: SwitchPrimitive.Root.Props & {
+  size?: 'sm' | 'default'
+}) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
+      data-size={size}
       className={cn(
-        'peer inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors outline-none',
-        'data-checked:bg-ink data-unchecked:bg-black/15',
-        'dark:data-checked:bg-white dark:data-unchecked:bg-white/20',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink',
-        'disabled:cursor-not-allowed disabled:opacity-50',
+        'peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent outline-none transition-all',
+        'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+        'data-checked:bg-primary data-unchecked:bg-input',
+        'data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'data-[size=default]:h-6 data-[size=default]:w-11',
+        'data-[size=sm]:h-5 data-[size=sm]:w-9',
         className,
       )}
       {...props}
@@ -18,9 +30,14 @@ function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(
-          'block size-5 rounded-full bg-white shadow transition-transform',
-          'data-checked:translate-x-[22px] data-unchecked:translate-x-0.5',
-          'dark:data-checked:bg-ink',
+          'pointer-events-none block rounded-full bg-background shadow transition-transform',
+          'group-data-[size=default]/switch:size-5',
+          'group-data-[size=sm]/switch:size-4',
+          'group-data-[size=default]/switch:data-checked:translate-x-[22px]',
+          'group-data-[size=default]/switch:data-unchecked:translate-x-0.5',
+          'group-data-[size=sm]/switch:data-checked:translate-x-[18px]',
+          'group-data-[size=sm]/switch:data-unchecked:translate-x-0.5',
+          'dark:data-checked:bg-primary-foreground',
         )}
       />
     </SwitchPrimitive.Root>

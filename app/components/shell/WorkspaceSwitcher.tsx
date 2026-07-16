@@ -13,12 +13,12 @@ import {
   TooltipTrigger,
 } from '~/components/ui/tooltip'
 import {
-  Menu,
-  MenuContent,
-  MenuItem,
-  MenuSeparator,
-  MenuTrigger,
-} from '~/components/ui/menu'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
 import { Dialog, DialogContent, DialogTitle } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -70,12 +70,12 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
 
   return (
     <>
-      <Menu>
+      <DropdownMenu>
         {/*
           Native button always — stays a real control when the rail is collapsed.
           Label visibility is driven by sidebar data-state CSS (not remount/class thrash).
         */}
-        <MenuTrigger
+        <DropdownMenuTrigger
           className={cn(
             SIDEBAR_FOOTER_ROW,
             'group/ws pill-focus border-0 bg-transparent text-left outline-none',
@@ -130,23 +130,23 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
               <ChevronsUpDown className={SIDEBAR_CHEVRON} aria-hidden />
             </span>
           </span>
-        </MenuTrigger>
-        <MenuContent side="top" align="start" className="w-72">
-          <MenuItem onClick={openSettings}>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="top" align="start" className="w-72">
+          <DropdownMenuItem onClick={openSettings}>
             <Settings
               className="h-[18px] w-[18px] opacity-80"
               strokeWidth={1.5}
             />
             Workspace settings
-          </MenuItem>
-          <MenuSeparator />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <div className="mx-1.5 px-2.5 py-1.5 text-[11px] font-medium uppercase tracking-wide text-ink-tertiary">
             Switch workspace
           </div>
           {data.workspaces.map((w) => {
             const isActive = w.id === data.activeWorkspaceId
             return (
-              <MenuItem key={w.id} onClick={() => goWorkspace(w.id)}>
+              <DropdownMenuItem key={w.id} onClick={() => goWorkspace(w.id)}>
                 <span className={SIDEBAR_FOOTER_WS_MARK}>
                   {w.name.slice(0, 1).toUpperCase()}
                 </span>
@@ -157,16 +157,16 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
                 ) : (
                   <span className="inline-block h-4 w-4 shrink-0" aria-hidden />
                 )}
-              </MenuItem>
+              </DropdownMenuItem>
             )
           })}
-          <MenuSeparator />
-          <MenuItem onClick={() => setCreateOpen(true)}>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setCreateOpen(true)}>
             <Plus className="h-[18px] w-[18px] opacity-80" />
             New workspace
-          </MenuItem>
-        </MenuContent>
-      </Menu>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent showCloseButton className="max-w-sm">

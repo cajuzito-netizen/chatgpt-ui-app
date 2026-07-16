@@ -1,11 +1,11 @@
 import { ChevronsUpDown, LifeBuoy, LogOut, User, UserRoundCog } from 'lucide-react'
 import {
-  Menu,
-  MenuContent,
-  MenuItem,
-  MenuSeparator,
-  MenuTrigger,
-} from '~/components/ui/menu'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
 import {
   SIDEBAR_CHEVRON,
   SIDEBAR_FOOTER_AVATAR,
@@ -41,8 +41,8 @@ export function UserAccountMenu({
   const collapsed = !open
 
   return (
-    <Menu>
-      <MenuTrigger
+    <DropdownMenu>
+      <DropdownMenuTrigger
         className={cn(
           SIDEBAR_FOOTER_ROW,
           'group/profile pill-focus border-0 bg-transparent text-left',
@@ -78,8 +78,8 @@ export function UserAccountMenu({
             <ChevronsUpDown className={SIDEBAR_CHEVRON} aria-hidden />
           </span>
         </span>
-      </MenuTrigger>
-      <MenuContent
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
         side={collapsed ? 'right' : 'top'}
         align={collapsed ? 'end' : 'start'}
         sideOffset={collapsed ? 10 : 8}
@@ -107,30 +107,30 @@ export function UserAccountMenu({
                 </p>
               </div>
             </div>
-            <MenuSeparator />
+            <DropdownMenuSeparator />
           </>
         )}
-        <MenuItem onClick={onProfile}>
+        <DropdownMenuItem onClick={onProfile}>
           <User className="h-[18px] w-[18px] opacity-80" strokeWidth={1.5} />
           Profile
-        </MenuItem>
-        <MenuItem onClick={onPreferences}>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onPreferences}>
           <UserRoundCog
             className="h-[18px] w-[18px] opacity-80"
             strokeWidth={1.5}
           />
           Preferences
-        </MenuItem>
-        <MenuItem onClick={onSupport}>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onSupport}>
           <LifeBuoy className="h-[18px] w-[18px] opacity-80" strokeWidth={1.5} />
           Support
-        </MenuItem>
-        <MenuSeparator />
-        <MenuItem onClick={onLogout}>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={onLogout}>
           <LogOut className="h-[18px] w-[18px] opacity-80" strokeWidth={1.5} />
           Log out
-        </MenuItem>
-      </MenuContent>
-    </Menu>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

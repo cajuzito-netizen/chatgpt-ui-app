@@ -38,7 +38,7 @@ npm run dev
 ```text
 app/
   components/shell/   # AppShell, WorkspaceSwitcher, BrandMark
-  components/ui/      # shadcn-style kit (Base UI under the hood)
+  components/ui/      # shadcn-parallel kit (Base UI; swap-compatible APIs)
   lib/app-config.ts   # APP_NAME / tagline — change per product
   lib/store.ts        # workspaces + user
   routes/             # home → /w/:id, settings

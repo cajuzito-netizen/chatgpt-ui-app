@@ -1,18 +1,18 @@
-import type { ComponentProps } from 'react'
+/**
+ * shadcn-compatible Label (plain <label>).
+ * API matches ui.shadcn.com `label`.
+ */
+import * as React from 'react'
 import { cn } from '~/lib/utils'
 
-/**
- * Simple form label (shadcn-style). For Field-bound validation labels,
- * use FieldLabel from `~/components/ui/field`.
- */
-function Label({ className, ...props }: ComponentProps<'label'>) {
+function Label({ className, ...props }: React.ComponentProps<'label'>) {
   return (
     <label
       data-slot="label"
       className={cn(
-        'mb-1 block text-[12px] font-medium text-ink-secondary',
+        'mb-1 flex items-center gap-2 text-[12px] font-medium leading-none text-muted-foreground select-none',
+        'group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50',
         'peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
-        'dark:text-dark-ink-secondary',
         className,
       )}
       {...props}

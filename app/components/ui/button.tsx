@@ -1,57 +1,64 @@
+/**
+ * shadcn-compatible Button over Base UI.
+ * Prop surface matches ui.shadcn.com `button` (variant / size / buttonVariants).
+ * Visuals use our ChatGPT-like tokens via theme CSS variables.
+ */
 import { Button as ButtonPrimitive } from '@base-ui/react/button'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '~/lib/utils'
 
-/**
- * shadcn-style Button over Base UI.
- * Variants match ChatGPT-like chrome (pill primary, outline, ghost).
- */
 const buttonVariants = cva(
   [
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap',
-    'rounded-full text-sm font-medium transition-colors outline-none select-none',
+    'group/button inline-flex shrink-0 items-center justify-center gap-2',
+    'rounded-full border border-transparent bg-clip-padding',
+    'text-sm font-medium whitespace-nowrap transition-all outline-none select-none',
+    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
     'disabled:pointer-events-none disabled:opacity-50',
-    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink',
-    'dark:focus-visible:outline-white',
-    '[&_svg]:pointer-events-none [&_svg]:shrink-0',
+    'aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20',
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   ].join(' '),
   {
     variants: {
       variant: {
         default:
-          'bg-ink text-white hover:bg-[#212121] dark:bg-white dark:text-ink dark:hover:bg-white/90',
+          'bg-primary text-primary-foreground hover:bg-primary/90',
         outline:
-          'border border-black/15 bg-white text-ink hover:bg-[#f9f9f9] dark:border-white/15 dark:bg-transparent dark:text-white dark:hover:bg-white/10',
+          'border-border bg-background hover:bg-muted hover:text-foreground dark:bg-transparent',
         secondary:
-          'bg-black/[0.06] text-ink hover:bg-black/[0.1] dark:bg-white/10 dark:text-white dark:hover:bg-white/15',
-        ghost:
-          'text-ink hover:bg-black/5 dark:text-white dark:hover:bg-white/10',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-muted hover:text-foreground',
         destructive:
-          'bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700',
-        link: 'rounded-none text-link underline-offset-2 hover:underline dark:text-dark-link',
+          'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:ring-destructive/20',
+        link: 'rounded-none text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-9 px-4',
-        sm: 'h-8 px-3 text-xs',
-        lg: 'h-11 px-5',
-        icon: 'h-9 w-9',
-        'icon-sm': 'h-8 w-8',
+        default: 'h-9 gap-1.5 px-4',
+        xs: 'h-6 gap-1 px-2 text-xs',
+        sm: 'h-8 gap-1 px-3 text-xs',
+        lg: 'h-11 gap-1.5 px-5',
+        icon: 'size-9',
+        'icon-xs': 'size-6',
+        'icon-sm': 'size-8',
+        'icon-lg': 'size-11',
       },
     },
-    defaultVariants: { variant: 'default', size: 'default' },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
   },
 )
 
 function Button({
   className,
-  variant,
-  size,
+  variant = 'default',
+  size = 'default',
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size }), className)}
+      className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
   )

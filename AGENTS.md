@@ -20,8 +20,14 @@ app/
 ### Rules
 
 1. **Shell is protected.** Do not replace `AppShell` with shadcn Sidebar kits.
-2. **All chrome primitives** from `app/components/ui/*` (shadcn-style + Base UI).
-   Prefer `Tip` for shell tooltips. Do not invent one-off modals/menus.
+2. **UI kit is shadcn-parallel** (`app/components/ui/*` over Base UI).
+   - Same **file names**, **exports**, and **props** as [shadcn/ui (base)](https://ui.shadcn.com).
+   - Import like shadcn: `import { Button } from '~/components/ui/button'`.
+   - Prefer `DropdownMenu*` (not legacy `Menu*`). Prefer `Tip` for shell tooltips.
+   - **Swap contract:** you can replace e.g. `ui/button.tsx` with an official
+     shadcn file and call sites keep working (API + Base UI). Only styles/tokens
+     may change. Theme bridge lives in `app/app.css` (`--color-primary`, etc.).
+   - Do not invent one-off modals/menus outside `ui/*`.
 3. **Workspaces first-class.** Data under `/w/:workspaceId/...`. Plan is per workspace.
 4. **Settings:** workspace menu → **Workspace settings** only.
 5. **Account:** user menu → Profile / Preferences / Support / Log out.

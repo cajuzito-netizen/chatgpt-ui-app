@@ -35,8 +35,8 @@ export function PlanBadge({
 
 /**
  * Clickable Free badge → upgrade.
- * Renders a <span role="button"> (not <button>) so it can sit inside MenuTrigger
- * without nested-button DOM thrash / load flicker.
+ * Renders a <span role="button"> (not <button>) so it can sit inside
+ * DropdownMenuTrigger without nested-button DOM thrash / load flicker.
  */
 export const FreeUpgradeBadge = forwardRef<
   HTMLSpanElement,
