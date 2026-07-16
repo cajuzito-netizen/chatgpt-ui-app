@@ -221,10 +221,13 @@ function ShellChrome({
                 shellNavItemClass(railCollapsed),
                 hideRow &&
                   'pointer-events-none !m-0 !h-0 !max-h-0 !overflow-hidden !p-0 !opacity-0',
-                labelsOpen &&
+                /* Hover always on visible rows — collapsed rail matches brand open control */
+                !hideRow &&
                   (active
                     ? 'bg-black/[0.05] dark:bg-white/10'
-                    : 'hover:bg-black/[0.05] dark:hover:bg-white/10'),
+                    : railCollapsed
+                      ? 'hover:bg-black/[0.07] dark:hover:bg-white/10'
+                      : 'hover:bg-black/[0.05] dark:hover:bg-white/10'),
               )}
               aria-label={item.label}
               aria-current={active ? 'page' : undefined}
