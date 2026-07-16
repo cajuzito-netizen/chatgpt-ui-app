@@ -1,15 +1,32 @@
 /**
  * PROTECTED SHELL — familiar sidebar chrome for product apps.
- * Mobile-first: drawer overlay on small screens; rail on md+.
+ * Desktop: collapsible rail (tokens in app.css). Mobile: ui/drawer.
  * See AGENTS.md.
  */
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { Menu as MenuIcon, PanelLeft, Sparkles, X } from 'lucide-react'
 import { BrandMark } from '~/components/shell/BrandMark'
+import {
+  SHELL_ASIDE,
+  SHELL_FOOTER,
+  SHELL_FOOTER_RULE,
+  SHELL_NAV,
+  SHELL_NAV_ICON,
+  shellAsideMotion,
+  shellChromeClass,
+  shellLabelClass,
+  shellNavItemClass,
+} from '~/components/shell/shell-classes'
 import { SupportDialog } from '~/components/shell/SupportDialog'
 import { UserAccountMenu } from '~/components/shell/UserAccountMenu'
 import { WorkspaceSwitcher } from '~/components/shell/WorkspaceSwitcher'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+} from '~/components/ui/drawer'
 import { Tip } from '~/components/ui/tip'
 import {
   AlertDialog,
@@ -39,7 +56,9 @@ const MD_MIN = 768
 
 function useIsDesktop() {
   const [desktop, setDesktop] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia(`(min-width: ${MD_MIN}px)`).matches : true,
+    typeof window !== 'undefined'
+      ? window.matchMedia(`(min-width: ${MD_MIN}px)`).matches
+      : true,
   )
   useEffect(() => {
     const mq = window.matchMedia(`(min-width: ${MD_MIN}px)`)
@@ -49,6 +68,196 @@ function useIsDesktop() {
     return () => mq.removeEventListener('change', onChange)
   }, [])
   return desktop
+}
+
+type ShellChromeProps = {
+  open: boolean
+  isDesktop: boolean
+  shellReady: boolean
+  workspaceId: string
+  labelsOpen: boolean
+  railCollapsed: boolean
+  settingsOrAccount: boolean
+  initials: string
+  displayName: string
+  email: string
+  onNavigateHome: () => void
+  onClose: () => void
+  onOpen: () => void
+  onCloseMobile: () => void
+  onProfile: () => void
+  onPreferences: () => void
+  onSupport: () => void
+  onLogout: () => void
+}
+
+function ShellChrome({
+  open,
+  isDesktop,
+  shellReady,
+  workspaceId,
+  labelsOpen,
+  railCollapsed,
+  settingsOrAccount,
+  initials,
+  displayName,
+  email,
+  onNavigateHome,
+  onClose,
+  onOpen,
+  onCloseMobile,
+  onProfile,
+  onPreferences,
+  onSupport,
+  onLogout,
+}: ShellChromeProps) {
+  const location = useLocation()
+
+  return (
+    <>
+      {railCollapsed && (
+        <button
+          type="button"
+          aria-label="Open sidebar"
+          className="absolute inset-y-0 -right-1 z-30 w-3 cursor-e-resize border-0 bg-transparent p-0"
+          onClick={onOpen}
+        />
+      )}
+
+      {/*
+        Live: open control at (8,8) 36×36 — ~8px from edges.
+        Keep one brand node always mounted so collapse doesn’t remount/flicker icons.
+      */}
+      <div className="relative flex h-13 shrink-0 items-center px-2 pt-2">
+        <Tip content="Open sidebar" side="right" disabled={!railCollapsed}>
+          <button
+            type="button"
+            className={cn(
+              ICON_BTN,
+              'group/brand relative z-10 shrink-0',
+              railCollapsed ? 'cursor-e-resize' : 'hover:bg-transparent',
+            )}
+            aria-label={railCollapsed ? 'Open sidebar' : 'Home'}
+            onClick={() => {
+              if (railCollapsed) {
+                onOpen()
+                return
+              }
+              onNavigateHome()
+            }}
+          >
+            <span className="relative flex h-6 w-6 items-center justify-center">
+              <BrandMark
+                className={cn(
+                  'pointer-events-none h-6 w-6 opacity-90 transition-opacity duration-150',
+                  railCollapsed &&
+                    'group-hover/brand:opacity-0 group-focus-visible/brand:opacity-0',
+                )}
+              />
+              {isDesktop && (
+                <PanelLeft
+                  className={cn(
+                    'pointer-events-none absolute h-5 w-5 transition-opacity duration-150',
+                    railCollapsed
+                      ? 'opacity-0 group-hover/brand:opacity-100 group-focus-visible/brand:opacity-100'
+                      : 'opacity-0',
+                  )}
+                  strokeWidth={1.5}
+                  aria-hidden
+                />
+              )}
+            </span>
+          </button>
+        </Tip>
+
+        <div className={shellChromeClass(open, shellReady)}>
+          {!isDesktop && (
+            <button
+              type="button"
+              className={ICON_BTN}
+              aria-label="Close menu"
+              onClick={onClose}
+            >
+              <X className="h-5 w-5" strokeWidth={1.5} />
+            </button>
+          )}
+          {isDesktop && (
+            <Tip content="Close sidebar" side="right">
+              <button
+                type="button"
+                className={cn(
+                  ICON_BTN,
+                  'cursor-w-resize text-ink-tertiary hover:bg-black/[0.07] hover:text-ink-tertiary',
+                )}
+                onClick={onClose}
+                aria-label="Close sidebar"
+                tabIndex={open ? 0 : -1}
+              >
+                <PanelLeft className="h-5 w-5" strokeWidth={1.5} />
+              </button>
+            </Tip>
+          )}
+        </div>
+      </div>
+
+      {/* Live: first nav ≈ y:60 → header h-13 (52) + 8px spacer */}
+      <div className="h-2 shrink-0" aria-hidden />
+
+      <nav className={SHELL_NAV}>
+        {PRODUCT_NAV.map((item) => {
+          const Icon = item.icon
+          const hideRow = railCollapsed && !item.onRail
+          const href = navHref(workspaceId, item.path)
+          const active = isNavActive(location.pathname, workspaceId, item, {
+            settingsOrAccount,
+          })
+
+          return (
+            <Link
+              key={item.id}
+              to={href}
+              onClick={onCloseMobile}
+              className={cn(
+                shellNavItemClass(railCollapsed),
+                hideRow &&
+                  'pointer-events-none !m-0 !h-0 !max-h-0 !overflow-hidden !p-0 !opacity-0',
+                labelsOpen &&
+                  (active
+                    ? 'bg-black/[0.05] dark:bg-white/10'
+                    : 'hover:bg-black/[0.05] dark:hover:bg-white/10'),
+              )}
+              aria-label={item.label}
+              aria-current={active ? 'page' : undefined}
+              tabIndex={hideRow ? -1 : 0}
+            >
+              <span className={cn(SHELL_NAV_ICON, 'opacity-80')} aria-hidden>
+                <Icon strokeWidth={1.5} />
+              </span>
+              <span className={shellLabelClass(labelsOpen, shellReady, 'truncate')}>
+                {item.label}
+              </span>
+            </Link>
+          )
+        })}
+      </nav>
+
+      <div className={SHELL_FOOTER}>
+        <hr className={SHELL_FOOTER_RULE} />
+        <WorkspaceSwitcher open={labelsOpen} />
+        <hr className={SHELL_FOOTER_RULE} />
+        <UserAccountMenu
+          open={labelsOpen}
+          displayName={displayName}
+          email={email}
+          initials={initials}
+          onProfile={onProfile}
+          onPreferences={onPreferences}
+          onSupport={onSupport}
+          onLogout={onLogout}
+        />
+      </div>
+    </>
+  )
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -95,6 +304,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   /* Mobile: drawer. Desktop: open = 260, closed = rail 52. */
   const railCollapsed = isDesktop && !open
+  const labelsOpen = !isDesktop || open
 
   useEffect(() => {
     const root = document.documentElement
@@ -140,8 +350,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   /*
    * Entering or leaving mobile: always reset mobile open to false.
    * Desktop open state is independent and is not touched.
-   * → Narrow window with desktop expanded never forces a stuck open drawer;
-   * → Widen then narrow again always starts mobile closed.
    */
   useEffect(() => {
     setSidebarMobileOpen(false)
@@ -156,200 +364,75 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (!isDesktop) setSidebarMobileOpen(false)
   }
 
+  const chromeProps: ShellChromeProps = {
+    open,
+    isDesktop,
+    shellReady,
+    workspaceId,
+    labelsOpen,
+    railCollapsed,
+    settingsOrAccount,
+    initials,
+    displayName: data.user.displayName,
+    email: data.user.email,
+    onNavigateHome: () => {
+      navigate(`/w/${workspaceId}`)
+      closeMobile()
+    },
+    onClose: () => setOpen(false),
+    onOpen: () => setOpen(true),
+    onCloseMobile: closeMobile,
+    onProfile: () => {
+      navigate(`${accountPath}?tab=profile`)
+      closeMobile()
+    },
+    onPreferences: () => {
+      navigate(`${accountPath}?tab=preferences`)
+      closeMobile()
+    },
+    onSupport: () => setSupportOpen(true),
+    onLogout: () => setLogoutOpen(true),
+  }
+
   return (
     <div className="flex h-full bg-surface text-ink dark:bg-dark-surface dark:text-dark-ink">
-      {/* Mobile scrim */}
-      {!isDesktop && open && (
-        <button
-          type="button"
-          aria-label="Close menu"
-          className="fixed inset-0 z-30 bg-black/40 md:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
-
-      <aside
-        data-state={open ? 'open' : 'closed'}
-        data-mode={isDesktop ? 'desktop' : 'mobile'}
-        data-ready={shellReady ? 'true' : 'false'}
-        className={cn(
-          /* Border is on .sidebar-shell CSS (1px live), not Tailwind — avoids double border */
-          'sidebar-shell z-40 flex h-full flex-col overflow-hidden bg-surface dark:bg-dark-surface',
-          'fixed inset-y-0 left-0 w-[min(var(--sidebar-width),85vw)] transition-transform duration-200 ease-out md:relative md:transition-[width]',
-          !isDesktop && (open ? 'translate-x-0' : '-translate-x-full'),
-          isDesktop && (open ? 'w-(--sidebar-width)' : 'w-(--sidebar-rail)'),
-          isDesktop && 'shrink-0',
-        )}
-      >
-        {railCollapsed && (
-          <button
-            type="button"
-            aria-label="Open sidebar"
-            className="absolute inset-y-0 -right-1 z-30 w-3 cursor-e-resize border-0 bg-transparent p-0"
-            onClick={() => setOpen(true)}
-          />
-        )}
-
-        {/*
-          Live: open control at (8,8) 36×36 — ~8px from edges.
-          Keep one brand node always mounted so collapse doesn’t remount/flicker icons.
-        */}
-        <div className="relative flex h-13 shrink-0 items-center px-2 pt-2">
-          <Tip content="Open sidebar" side="right" disabled={!railCollapsed}>
-            <button
-              type="button"
-              className={cn(
-                ICON_BTN,
-                'group/brand relative z-10 shrink-0',
-                railCollapsed
-                  ? 'cursor-e-resize'
-                  : 'hover:bg-transparent',
-              )}
-              aria-label={railCollapsed ? 'Open sidebar' : 'Home'}
-              onClick={() => {
-                if (railCollapsed) {
-                  setOpen(true)
-                  return
-                }
-                navigate(`/w/${workspaceId}`)
-                closeMobile()
-              }}
-            >
-              <span className="relative flex h-6 w-6 items-center justify-center">
-                <BrandMark
-                  className={cn(
-                    'pointer-events-none h-6 w-6 opacity-90 transition-opacity duration-150',
-                    railCollapsed &&
-                      'group-hover/brand:opacity-0 group-focus-visible/brand:opacity-0',
-                  )}
-                />
-                {isDesktop && (
-                  <PanelLeft
-                    className={cn(
-                      'pointer-events-none absolute h-5 w-5 transition-opacity duration-150',
-                      railCollapsed
-                        ? 'opacity-0 group-hover/brand:opacity-100 group-focus-visible/brand:opacity-100'
-                        : 'opacity-0',
-                    )}
-                    strokeWidth={1.5}
-                    aria-hidden
-                  />
-                )}
-              </span>
-            </button>
-          </Tip>
-
-          <div
+      {isDesktop ? (
+        <aside
+          data-state={open ? 'open' : 'closed'}
+          data-mode="desktop"
+          data-ready={shellReady ? 'true' : 'false'}
+          className={cn(
+            SHELL_ASIDE,
+            'relative',
+            open ? 'w-(--sidebar-width)' : 'w-(--sidebar-rail)',
+            shellAsideMotion(shellReady),
+          )}
+        >
+          <ShellChrome {...chromeProps} />
+        </aside>
+      ) : (
+        <Drawer
+          open={open}
+          onOpenChange={(next) => setSidebarMobileOpen(next)}
+          swipeDirection="left"
+        >
+          <DrawerContent
+            side="left"
             className={cn(
-              'sidebar-chrome ms-auto flex shrink-0 items-center gap-0.5',
-              !open && isDesktop && 'pointer-events-none',
+              'border-r border-r-(length:--sidebar-divider)',
+              'border-r-(--sidebar-divider-color) dark:border-r-(--sidebar-divider-color-dark)',
             )}
           >
-            {!isDesktop && (
-              <button
-                type="button"
-                className={ICON_BTN}
-                aria-label="Close menu"
-                onClick={() => setOpen(false)}
-              >
-                <X className="h-5 w-5" strokeWidth={1.5} />
-              </button>
-            )}
-            {isDesktop && (
-              <Tip content="Close sidebar" side="right">
-                <button
-                  type="button"
-                  className={cn(
-                    ICON_BTN,
-                    'cursor-w-resize text-ink-tertiary hover:bg-black/[0.07] hover:text-ink-tertiary',
-                  )}
-                  onClick={() => setOpen(false)}
-                  aria-label="Close sidebar"
-                  tabIndex={open ? 0 : -1}
-                >
-                  <PanelLeft className="h-5 w-5" strokeWidth={1.5} />
-                </button>
-              </Tip>
-            )}
-          </div>
-        </div>
-
-        {/* Live: first nav ≈ y:60 → header h-13 (52) + 8px spacer */}
-        <div className="h-2 shrink-0" aria-hidden />
-
-        {/* Live nav: flush rows, margin 6 + pad 6×10 */}
-        <nav className="sidebar-nav relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden">
-          {PRODUCT_NAV.map((item) => {
-            const Icon = item.icon
-            const hideRow = railCollapsed && !item.onRail
-            const href = navHref(workspaceId, item.path)
-            const active = isNavActive(location.pathname, workspaceId, item, {
-              settingsOrAccount,
-            })
-
-            return (
-              <Link
-                key={item.id}
-                to={href}
-                onClick={closeMobile}
-                className={cn(
-                  'sidebar-nav-item',
-                  hideRow &&
-                    'pointer-events-none !m-0 !h-0 !max-h-0 !overflow-hidden !p-0 !opacity-0',
-                  (open || !isDesktop) &&
-                    (active
-                      ? 'bg-black/[0.05] dark:bg-white/10'
-                      : 'hover:bg-black/[0.05] dark:hover:bg-white/10'),
-                )}
-                aria-label={item.label}
-                aria-current={active ? 'page' : undefined}
-                tabIndex={hideRow ? -1 : 0}
-              >
-                <span className="sidebar-nav-icon opacity-80" aria-hidden>
-                  <Icon strokeWidth={1.5} />
-                </span>
-                <span
-                  className={cn(
-                    'sidebar-label min-w-0 flex-1 truncate',
-                    (open || !isDesktop) && 'sidebar-label--expanded',
-                  )}
-                >
-                  {item.label}
-                </span>
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/*
-          Live profile wrap: pt-2 pb-1.5 (8 / 6). One card on chatgpt.com;
-          we stack workspace + user with the same card geometry.
-        */}
-        <div className="sidebar-footer relative z-10 mt-auto">
-          <hr className="sidebar-rule" />
-          <WorkspaceSwitcher open={open || !isDesktop} />
-          <hr className="sidebar-rule" />
-          <UserAccountMenu
-            open={open || !isDesktop}
-            displayName={data.user.displayName}
-            email={data.user.email}
-            initials={initials}
-            onProfile={() => {
-              navigate(`${accountPath}?tab=profile`)
-              closeMobile()
-            }}
-            onPreferences={() => {
-              navigate(`${accountPath}?tab=preferences`)
-              closeMobile()
-            }}
-            onSupport={() => setSupportOpen(true)}
-            onLogout={() => setLogoutOpen(true)}
-          />
-        </div>
-      </aside>
+            <DrawerTitle className="sr-only">Navigation</DrawerTitle>
+            <DrawerDescription className="sr-only">
+              Workspace navigation and account
+            </DrawerDescription>
+            <ShellChrome {...chromeProps} open isDesktop={false} railCollapsed={false} labelsOpen />
+          </DrawerContent>
+        </Drawer>
+      )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Mobile: menu only. Desktop: no chrome bar when empty. Upgrade is FAB. */}
         <header
           className={cn(
             'flex shrink-0 items-center gap-1 px-2',
@@ -371,10 +454,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="relative flex min-h-0 flex-1 flex-col">{children}</div>
       </div>
 
-      {/*
-        Upgrade chip — same look as the old header control, fixed top-right
-        (not a dark FAB). Free workspaces only; plan badge stays on switcher.
-      */}
       {showUpgrade && (
         <button
           type="button"
@@ -384,7 +463,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             'bg-transparent px-3 text-[14px] font-medium text-[#2c67c5]',
             'hover:bg-[#2c67c5]/[0.09] dark:text-[#7ab7ff]',
             'top-[max(0.5rem,env(safe-area-inset-top))] right-[max(0.5rem,env(safe-area-inset-right))]',
-            /* Room for mobile menu button on the left; chip sits top-right */
             'mt-1 me-1',
           )}
           aria-label="Upgrade workspace plan"

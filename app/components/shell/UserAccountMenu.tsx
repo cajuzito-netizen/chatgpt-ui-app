@@ -7,10 +7,12 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import {
-  SIDEBAR_CHEVRON,
-  SIDEBAR_FOOTER_AVATAR,
-  SIDEBAR_FOOTER_ROW,
-} from '~/components/shell/footer-row'
+  SHELL_AVATAR,
+  SHELL_AVATAR_INITIALS,
+  SHELL_CHEVRON,
+  shellFooterRowClass,
+  shellLabelClass,
+} from '~/components/shell/shell-classes'
 import { cn } from '~/lib/utils'
 
 /**
@@ -44,7 +46,7 @@ export function UserAccountMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          SIDEBAR_FOOTER_ROW,
+          shellFooterRowClass(collapsed),
           'group/profile pill-focus border-0 bg-transparent text-left',
           'hover:bg-black/[0.05] dark:hover:bg-white/10',
         )}
@@ -53,19 +55,15 @@ export function UserAccountMenu({
       >
         <span
           className={cn(
-            SIDEBAR_FOOTER_AVATAR,
-            'sidebar-avatar--initials bg-teal-500 text-white',
+            SHELL_AVATAR,
+            SHELL_AVATAR_INITIALS,
+            'bg-teal-500 text-white',
           )}
           aria-hidden
         >
           {initials}
         </span>
-        <span
-          className={cn(
-            'sidebar-label min-w-0 flex-1 text-left',
-            open && 'sidebar-label--expanded',
-          )}
-        >
+        <span className={shellLabelClass(open, true, 'text-left')}>
           <span className="flex min-w-0 items-center gap-2">
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[14px] font-medium leading-5">
@@ -75,7 +73,7 @@ export function UserAccountMenu({
                 {email}
               </span>
             </span>
-            <ChevronsUpDown className={SIDEBAR_CHEVRON} aria-hidden />
+            <ChevronsUpDown className={SHELL_CHEVRON} aria-hidden />
           </span>
         </span>
       </DropdownMenuTrigger>
@@ -91,8 +89,9 @@ export function UserAccountMenu({
             <div className="mx-1.5 flex items-center gap-2 rounded-[10px] px-2.5 py-1.5">
               <span
                 className={cn(
-                  SIDEBAR_FOOTER_AVATAR,
-                  'sidebar-avatar--initials bg-teal-500 text-white',
+                  SHELL_AVATAR,
+                  SHELL_AVATAR_INITIALS,
+                  'bg-teal-500 text-white',
                 )}
                 aria-hidden
               >

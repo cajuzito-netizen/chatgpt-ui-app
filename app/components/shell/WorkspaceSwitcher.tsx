@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router'
 import { Check, ChevronsUpDown, Plus, Settings } from 'lucide-react'
 import { FreeUpgradeBadge, PlanBadge } from '~/components/shell/PlanBadge'
 import {
-  SIDEBAR_CHEVRON,
-  SIDEBAR_FOOTER_ROW,
-  SIDEBAR_FOOTER_WS_MARK,
-} from '~/components/shell/footer-row'
+  SHELL_CHEVRON,
+  SHELL_WS_MARK,
+  shellFooterRowClass,
+  shellLabelClass,
+} from '~/components/shell/shell-classes'
 import {
   Tooltip,
   TooltipContent,
@@ -77,7 +78,7 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
         */}
         <div
           className={cn(
-            SIDEBAR_FOOTER_ROW,
+            shellFooterRowClass(!open),
             'group/ws relative',
             'hover:bg-black/[0.05] dark:hover:bg-white/10',
           )}
@@ -98,16 +99,17 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
 
           {/* Visual layer — ignores clicks except Free chip */}
           <span
-            className={cn(SIDEBAR_FOOTER_WS_MARK, 'relative z-[11] pointer-events-none')}
+            className={cn(SHELL_WS_MARK, 'relative z-[11] pointer-events-none')}
             aria-hidden
           >
             {letter}
           </span>
 
           <span
-            className={cn(
-              'sidebar-label relative z-[11] min-w-0 flex-1 pointer-events-none',
-              open && 'sidebar-label--expanded',
+            className={shellLabelClass(
+              open,
+              true,
+              'relative z-[11] pointer-events-none',
             )}
           >
             <span className="flex min-w-0 items-center gap-2">
@@ -135,7 +137,7 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
               )}
 
               <ChevronsUpDown
-                className={cn(SIDEBAR_CHEVRON, 'pointer-events-none')}
+                className={cn(SHELL_CHEVRON, 'pointer-events-none')}
                 aria-hidden
               />
             </span>
@@ -158,7 +160,7 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
             const isActive = w.id === data.activeWorkspaceId
             return (
               <DropdownMenuItem key={w.id} onClick={() => goWorkspace(w.id)}>
-                <span className={SIDEBAR_FOOTER_WS_MARK}>
+                <span className={SHELL_WS_MARK}>
                   {w.name.slice(0, 1).toUpperCase()}
                 </span>
                 <span className="min-w-0 flex-1 truncate">{w.name}</span>
