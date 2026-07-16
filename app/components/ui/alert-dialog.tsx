@@ -36,18 +36,6 @@ export function AlertDialogTitle({
   )
 }
 
-export function AlertDialogDescription({
-  className,
-  ...props
-}: AlertDialogPrimitive.Description.Props) {
-  return (
-    <AlertDialogPrimitive.Description
-      className={cn('text-sm text-ink-secondary', className)}
-      {...props}
-    />
-  )
-}
-
 export function AlertDialogAction({
   className,
   ...props

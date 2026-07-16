@@ -14,7 +14,7 @@ import type {
 const KEY = 'app-shell:v1'
 
 /** Stable seed so SSR and the first client paint share the same workspace id. */
-export const SEED_WS_ID = 'ws_personal'
+const SEED_WS_ID = 'ws_personal'
 
 function defaultData(): AppData {
   const ws: Workspace = {
@@ -211,14 +211,6 @@ export function setSidebarMobileOpen(open: boolean) {
 
 /* ── Workspaces ────────────────────────────────────────────── */
 
-export function listWorkspaces() {
-  return data.workspaces
-}
-
-export function getWorkspace(id: string) {
-  return data.workspaces.find((w) => w.id === id)
-}
-
 export function getActiveWorkspaceId() {
   return data.activeWorkspaceId
 }
@@ -341,10 +333,6 @@ export function updateUser(partial: Partial<AppData['user']>) {
 }
 
 /* ── Support tickets ───────────────────────────────────────── */
-
-export function listTickets() {
-  return [...data.tickets].sort((a, b) => b.createdAt - a.createdAt)
-}
 
 /** Minimal ticket: subject required; body optional. */
 export function createSupportTicket(input: {

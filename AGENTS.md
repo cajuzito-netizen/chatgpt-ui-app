@@ -20,7 +20,7 @@ app/
 ### Rules
 
 1. **Shell is protected.** Do not replace `AppShell` with shadcn Sidebar kits.
-2. **All dialogs / menus / tooltips / switches** from `app/components/ui/*` (or `Tip`).
+2. **All dialogs / menus / tooltips** from `app/components/ui/*` (or `Tip`).
 3. **Workspaces first-class.** Data under `/w/:workspaceId/...`. Plan is per workspace.
 4. **Settings:** workspace menu → **Workspace settings** only.
 5. **Account:** user menu → Profile / Preferences / Support / Log out.

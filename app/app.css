@@ -129,18 +129,6 @@ aside.cursor-e-resize,
   outline-color: var(--color-dark-ink);
 }
 
-.composer-shell {
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.02),
-    0 2px 12px rgba(0, 0, 0, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.03);
-}
-
-.dark .composer-shell {
-  box-shadow: none;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .h-13 {
   height: 3.25rem;
 }

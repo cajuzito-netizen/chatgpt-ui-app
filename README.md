@@ -38,7 +38,7 @@ npm run dev
 ```text
 app/
   components/shell/   # AppShell, WorkspaceSwitcher, BrandMark
-  components/ui/      # dialog, menu, tooltip, switch, button, input
+  components/ui/      # dialog, menu, tooltip, button, input
   lib/app-config.ts   # APP_NAME / tagline — change per product
   lib/store.ts        # workspaces + user
   routes/             # home → /w/:id, settings
