@@ -1,19 +1,24 @@
-import type { InputHTMLAttributes } from 'react'
+import { Input as InputPrimitive } from '@base-ui/react/input'
 import { cn } from '~/lib/utils'
 
-export function Input({
-  className,
-  ...props
-}: InputHTMLAttributes<HTMLInputElement>) {
+function Input({ className, type, ...props }: InputPrimitive.Props) {
   return (
-    <input
+    <InputPrimitive
+      type={type}
+      data-slot="input"
       className={cn(
-        'h-11 w-full rounded-xl border border-black/10 bg-transparent px-3 text-[15px] outline-none',
-        'placeholder:text-ink-tertiary focus:border-black/30',
-        'dark:border-white/15 dark:placeholder:text-dark-ink-tertiary',
+        'flex h-11 w-full min-w-0 rounded-xl border border-black/10 bg-transparent px-3 text-[15px]',
+        'outline-none transition-colors',
+        'placeholder:text-ink-tertiary',
+        'focus:border-black/30',
+        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        'dark:border-white/15 dark:placeholder:text-dark-ink-tertiary dark:focus:border-white/30',
+        'file:border-0 file:bg-transparent file:text-sm file:font-medium',
         className,
       )}
       {...props}
     />
   )
 }
+
+export { Input }

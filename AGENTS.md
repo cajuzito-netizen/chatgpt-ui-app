@@ -9,7 +9,7 @@ apps (email sender, CRM, internal tools). Keep the product thin.
 app/
   components/
     shell/     # PROTECTED — AppShell, WorkspaceSwitcher, BrandMark, menus
-    ui/        # ONLY allowed primitives (Base UI recipes)
+    ui/        # shadcn-style primitives over Base UI (ONLY chrome kit)
   lib/
     store.ts       # workspaces, items, tickets, ui prefs
     nav-config.ts  # product nav (edit per fork)
@@ -20,7 +20,8 @@ app/
 ### Rules
 
 1. **Shell is protected.** Do not replace `AppShell` with shadcn Sidebar kits.
-2. **All dialogs / menus / tooltips** from `app/components/ui/*` (or `Tip`).
+2. **All chrome primitives** from `app/components/ui/*` (shadcn-style + Base UI).
+   Prefer `Tip` for shell tooltips. Do not invent one-off modals/menus.
 3. **Workspaces first-class.** Data under `/w/:workspaceId/...`. Plan is per workspace.
 4. **Settings:** workspace menu → **Workspace settings** only.
 5. **Account:** user menu → Profile / Preferences / Support / Log out.

@@ -9,6 +9,14 @@ import { X } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
+import { Label } from '~/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -149,27 +157,21 @@ export default function AccountSettingsRoute() {
                     </div>
                   </div>
                   <div>
-                    <label className="mb-1 block text-[12px] text-ink-secondary">
-                      Display name
-                    </label>
+                    <Label>Display name</Label>
                     <Input
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-[12px] text-ink-secondary">
-                      Username
-                    </label>
+                    <Label>Username</Label>
                     <Input
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-[12px] text-ink-secondary">
-                      Email
-                    </label>
+                    <Label>Email</Label>
                     <Input value={data.user.email} disabled />
                     <p className="mt-1 text-[12px] text-ink-tertiary">
                       Email change belongs in a later auth flow.
@@ -227,19 +229,24 @@ export default function AccountSettingsRoute() {
                         Preferred UI language (demo).
                       </p>
                     </div>
-                    <select
-                      className="h-9 rounded-lg border border-black/10 bg-transparent px-2 text-[13px] dark:border-white/15"
+                    <Select
                       value={language}
-                      onChange={(e) => {
-                        setLanguage(e.target.value)
-                        updateUser({ preferredLanguage: e.target.value })
+                      onValueChange={(v) => {
+                        if (!v) return
+                        setLanguage(v)
+                        updateUser({ preferredLanguage: v })
                       }}
                     >
-                      <option value="en">English</option>
-                      <option value="pt">Português</option>
-                      <option value="es">Español</option>
-                      <option value="fr">Français</option>
-                    </select>
+                      <SelectTrigger size="sm" className="w-[140px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="pt">Português</SelectItem>
+                        <SelectItem value="es">Español</SelectItem>
+                        <SelectItem value="fr">Français</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="rounded-xl border border-red-200/80 p-4 mt-4 dark:border-red-900/50">

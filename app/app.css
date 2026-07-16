@@ -81,11 +81,18 @@ body,
   margin: 0;
 }
 
+/* Base UI: portals stack above app; iOS backdrops need relative body */
 body {
+  position: relative;
   font-family: var(--font-sans);
   background: var(--color-surface);
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
+}
+
+.app-root {
+  isolation: isolate;
+  height: 100%;
 }
 
 .dark body,

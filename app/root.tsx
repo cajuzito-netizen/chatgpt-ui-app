@@ -42,7 +42,7 @@ export function HydrateFallback() {
 export default function App() {
   return (
     <TooltipProvider delay={400}>
-      <div className="h-full">
+      <div className="app-root">
         <Outlet />
       </div>
     </TooltipProvider>

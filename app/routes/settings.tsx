@@ -8,6 +8,15 @@ import { X } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
+import { Label } from '~/components/ui/label'
+import { Badge } from '~/components/ui/badge'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
 import {
   deleteWorkspace,
   getActiveWorkspaceId,
@@ -123,9 +132,7 @@ export default function WorkspaceSettingsRoute() {
             {tab === 'general' && (
               <div className="space-y-4 py-3">
                 <div>
-                  <label className="mb-1 block text-[12px] text-ink-secondary">
-                    Workspace name
-                  </label>
+                  <Label>Workspace name</Label>
                   <Input
                     value={wsName}
                     onChange={(e) => setWsName(e.target.value)}
@@ -149,13 +156,11 @@ export default function WorkspaceSettingsRoute() {
             {tab === 'members' && (
               <div className="space-y-4 py-3">
                 <p className="text-[13px] text-ink-secondary">
-                  Invite teammates to this workspace. Roles stay simple for
-                  v1 (owner / member).
+                  Invite teammates to this workspace. Roles: owner, admin,
+                  user (mock UI — full member model next).
                 </p>
                 <div>
-                  <label className="mb-1 block text-[12px] text-ink-secondary">
-                    Email
-                  </label>
+                  <Label>Email</Label>
                   <div className="flex gap-2">
                     <Input
                       type="email"
@@ -180,12 +185,18 @@ export default function WorkspaceSettingsRoute() {
                     </p>
                   )}
                 </div>
-                <div className="rounded-xl border border-black/8 px-3 py-3 dark:border-white/10">
-                  <p className="text-[13px] font-medium">You · Owner</p>
-                  <p className="truncate text-[12px] text-ink-secondary">
-                    {data.user.email}
-                  </p>
-                </div>
+                <Card>
+                  <CardHeader className="pb-0">
+                    <CardTitle className="flex items-center gap-2">
+                      You
+                      <Badge variant="secondary">Owner</Badge>
+                    </CardTitle>
+                    <CardDescription className="truncate">
+                      {data.user.email}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-2" />
+                </Card>
               </div>
             )}
 
@@ -194,11 +205,7 @@ export default function WorkspaceSettingsRoute() {
                 <Row
                   title="Current plan"
                   description={`This workspace is on ${planLabel}. Billing is per workspace.`}
-                  right={
-                    <span className="rounded-full bg-black/[0.06] px-2.5 py-1 text-[12px] font-medium dark:bg-white/10">
-                      {planLabel}
-                    </span>
-                  }
+                  right={<Badge variant="secondary">{planLabel}</Badge>}
                 />
                 {ws?.plan === 'free' ? (
                   <div className="rounded-xl border border-[#2c67c5]/30 bg-[#2c67c5]/[0.06] p-4">

@@ -1,6 +1,6 @@
 /**
  * App-level tooltip helper — always-dark ChatGPT-style chip.
- * Agents should use this, not invent portal tooltips.
+ * Prefer this over raw Tooltip for shell icon labels.
  */
 import type { ReactNode } from 'react'
 import {
@@ -12,7 +12,7 @@ import { cn } from '~/lib/utils'
 
 export type TipSide = 'top' | 'bottom' | 'left' | 'right'
 
-export function Tip({
+function Tip({
   content,
   shortcut,
   side = 'bottom',
@@ -27,10 +27,7 @@ export function Tip({
   className?: string
   children: ReactNode
 }) {
-  /*
-   * Always keep the same tree so enable/disable doesn’t remount children
-   * (sidebar collapse was remounting brand/nav icons and causing flicker).
-   */
+  /* Keep tree stable so enable/disable does not remount children. */
   return (
     <Tooltip disabled={disabled}>
       <TooltipTrigger
@@ -41,17 +38,19 @@ export function Tip({
       </TooltipTrigger>
       <TooltipContent side={side} sideOffset={4}>
         <span>{content}</span>
-        {shortcut && shortcut.length === 1 && (
+        {shortcut && shortcut.length === 1 ? (
           <kbd className="ml-1 inline-flex h-4 min-w-4 items-center justify-center rounded bg-[#414141] text-[11px] font-medium text-[#afafaf]">
             {shortcut[0]}
           </kbd>
-        )}
-        {shortcut && shortcut.length > 1 && (
+        ) : null}
+        {shortcut && shortcut.length > 1 ? (
           <span className="ml-1 text-[12px] font-medium text-[#afafaf]">
             {shortcut.join(' + ')}
           </span>
-        )}
+        ) : null}
       </TooltipContent>
     </Tooltip>
   )
 }
+
+export { Tip }

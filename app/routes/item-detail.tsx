@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
+import { Textarea } from '~/components/ui/textarea'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -64,20 +66,15 @@ export default function ItemDetailRoute() {
 
       <div className="mt-6 space-y-4">
         <div>
-          <label className="mb-1 block text-[12px] text-ink-secondary">
-            Title
-          </label>
+          <Label>Title</Label>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <div>
-          <label className="mb-1 block text-[12px] text-ink-secondary">
-            Notes
-          </label>
-          <textarea
+          <Label>Notes</Label>
+          <Textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
             rows={8}
-            className="w-full resize-none rounded-xl border border-black/10 bg-transparent px-3 py-2 text-[15px] outline-none focus:border-black/30 dark:border-white/15"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -92,7 +89,7 @@ export default function ItemDetailRoute() {
           </Button>
           <Button
             variant="outline"
-            className="border-red-300 text-red-600"
+            className="border-red-300 text-red-600 dark:border-red-800 dark:text-red-400"
             onClick={() => setDeleteOpen(true)}
           >
             Delete
