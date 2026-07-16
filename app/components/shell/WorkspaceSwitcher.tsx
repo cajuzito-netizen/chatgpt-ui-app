@@ -72,13 +72,17 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
     <>
       <DropdownMenu>
         {/*
-          Native button always — stays a real control when the rail is collapsed.
-          Label visibility is driven by sidebar data-state CSS (not remount/class thrash).
+          Render as <div>, not <button>: Free plan nests an upgrade chip that
+          is itself interactive — button-in-button is invalid HTML and breaks
+          layout after the Base UI / DropdownMenu swap.
+          Label visibility is CSS [data-state] only (no remount thrash).
         */}
         <DropdownMenuTrigger
+          nativeButton={false}
+          render={<div />}
           className={cn(
             SIDEBAR_FOOTER_ROW,
-            'group/ws pill-focus border-0 bg-transparent text-left outline-none',
+            'group/ws pill-focus cursor-pointer border-0 bg-transparent text-left outline-none',
             'hover:bg-black/[0.05] dark:hover:bg-white/10',
           )}
           aria-label={`Workspace: ${active?.name ?? 'Workspace'} (${plan})`}
@@ -89,15 +93,10 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
           </span>
           <span
             className={cn(
-              /* Visibility is CSS-only via [data-state] — avoids open-prop flash on load */
               'sidebar-label min-w-0 flex-1',
               open && 'sidebar-label--expanded',
             )}
           >
-            {/*
-              Single-line row so the name is vertically centered in the 52px card.
-              Pro shows a second line under the name; Free uses trailing badge.
-            */}
             <span className="flex min-w-0 items-center gap-2">
               <span className="min-w-0 flex-1 text-left">
                 <span className="block truncate text-[14px] font-medium leading-5">
@@ -111,6 +110,10 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
               </span>
               {plan === 'free' && (
                 <Tooltip>
+                  {/*
+                    Free chip is a <span role="button"> (FreeUpgradeBadge), not
+                    a <button>, so it can live inside the trigger div.
+                  */}
                   <TooltipTrigger
                     render={
                       <FreeUpgradeBadge
