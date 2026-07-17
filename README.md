@@ -26,8 +26,8 @@ pnpm dev
 ## Features (v1)
 
 - Collapsible sidebar (260 ↔ 52), state persisted, expand edge hit-target
-- Workspace switcher (create / switch / rename / delete, keep ≥1)
-- Product nav: **Home · New item · Items** (+ Settings) via `nav-config.ts`
+- Workspaces (create / switch / rename / delete, keep ≥1) via **account menu**
+- Product nav: **Home · Items** via `nav-config.ts` (New item = page CTA)
 - Workspace-scoped **Items** (create / list / edit / delete)
 - Settings (workspace) + Account (profile / prefs) + Support tickets
 - Upgrade chip (workspace plan Free → Pro)
@@ -37,13 +37,16 @@ pnpm dev
 
 ```text
 app/
-  components/shell/   # AppShell, WorkspaceSwitcher, BrandMark
+  components/shell/   # AppShell, UserAccountMenu, BrandMark
+                      # WorkspaceSwitcher optional (not mounted)
   components/ui/      # shadcn-parallel kit (Base UI; swap-compatible APIs)
   lib/app-config.ts   # APP_NAME / tagline — change per product
   lib/store.ts        # workspaces + user
   routes/             # home → /w/:id, settings
-AGENTS.md             # rules for coding agents
+AGENTS.md             # rules for coding agents (magic vs velocity)
+docs/shell-metrics.md # chrome geometry reference
 ```
+
 
 ## Customize for a product
 

@@ -9,7 +9,6 @@ import { Menu as MenuIcon, PanelLeft, Sparkles, X } from 'lucide-react'
 import { BrandMark } from '~/components/shell/BrandMark'
 import { SupportDialog } from '~/components/shell/SupportDialog'
 import { UserAccountMenu } from '~/components/shell/UserAccountMenu'
-import { WorkspaceSwitcher } from '~/components/shell/WorkspaceSwitcher'
 import {
   Drawer,
   DrawerContent,
@@ -29,6 +28,7 @@ import {
   navHref,
   PRODUCT_NAV,
 } from '~/lib/nav-config'
+import { brandBlueText } from '~/lib/brand'
 import {
   getActiveWorkspaceId,
   setActiveWorkspace,
@@ -36,28 +36,15 @@ import {
   setSidebarMobileOpen,
 } from '~/lib/store'
 import { useAppStore } from '~/lib/use-store'
+import { useDocumentTheme } from '~/lib/use-document-theme'
+import { useIsDesktop } from '~/lib/use-is-desktop'
 import { cn } from '~/lib/utils'
 
 const ICON_BTN =
   'pill-focus flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-foreground hover:bg-black/[0.07] dark:hover:bg-white/10'
 
-const MD_MIN = 768
-
-function useIsDesktop() {
-  const [desktop, setDesktop] = useState(() =>
-    typeof window !== 'undefined'
-      ? window.matchMedia(`(min-width: ${MD_MIN}px)`).matches
-      : true,
-  )
-  useEffect(() => {
-    const mq = window.matchMedia(`(min-width: ${MD_MIN}px)`)
-    const onChange = () => setDesktop(mq.matches)
-    onChange()
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
-  return desktop
-}
+const SHELL_RULE =
+  'pointer-events-none mx-1.5 mt-1.5 mb-1.5 box-border h-0 w-auto shrink-0 border-0 border-t border-black/[0.06] dark:border-white/10'
 
 type ShellChromeProps = {
   open: boolean
@@ -113,10 +100,6 @@ function ShellChrome({
         />
       )}
 
-      {/*
-        Live: open control at (8,8) 36×36 — ~8px from edges.
-        Keep one brand node always mounted so collapse doesn’t remount/flicker icons.
-      */}
       <div className="relative flex h-12 shrink-0 items-center px-2 pt-2">
         <Tip content="Open sidebar" side="right" disabled={!railCollapsed}>
           <button
@@ -199,13 +182,8 @@ function ShellChrome({
         </div>
       </div>
 
-      {/*
-        Hierarchy (option B): brand → workspace → product nav → account.
-        Workspace sits under brand so “which world” is primary context.
-      */}
-      <div className="h-1.5 shrink-0" aria-hidden />
-      <WorkspaceSwitcher open={labelsOpen} menuSide="bottom" />
-      <div className="h-1.5 shrink-0" aria-hidden />
+      {/* brand → nav → account; extra air before first nav item */}
+      <div className="h-4 shrink-0" aria-hidden />
 
       <nav className="relative z-10 flex min-h-0 flex-1 flex-col gap-px overflow-y-auto overflow-x-hidden">
         {PRODUCT_NAV.map((item) => {
@@ -228,7 +206,6 @@ function ShellChrome({
                 railCollapsed ? 'gap-0' : 'gap-1.5',
                 hideRow &&
                   'pointer-events-none !m-0 !h-0 !max-h-0 !overflow-hidden !p-0 !opacity-0',
-                /* Hover always on visible rows — collapsed rail matches brand open control */
                 !hideRow &&
                   (active
                     ? 'bg-black/[0.05] dark:bg-white/10'
@@ -267,7 +244,7 @@ function ShellChrome({
       </nav>
 
       <div className="relative z-10 mt-auto flex shrink-0 flex-col gap-0 pb-1.5 pt-0">
-        <hr className="pointer-events-none mx-1.5 mt-1.5 mb-1.5 box-border h-0 w-auto shrink-0 border-0 border-t border-black/[0.06] dark:border-white/10" />
+        <hr className={SHELL_RULE} />
         <UserAccountMenu
           open={labelsOpen}
           displayName={displayName}
@@ -289,6 +266,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const params = useParams()
   const location = useLocation()
   const isDesktop = useIsDesktop()
+  useDocumentTheme(data.user.theme)
 
   const workspaceId = params.workspaceId ?? data.activeWorkspaceId
   const workspace = data.workspaces.find((w) => w.id === workspaceId)
@@ -296,16 +274,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     Boolean(params.workspaceId) &&
     !data.workspaces.some((w) => w.id === params.workspaceId)
 
-  /**
-   * Independent open state per breakpoint so resizing desktop→mobile
-   * does not leave a full drawer open (and vice versa).
-   */
   const open = isDesktop
     ? data.ui.sidebarDesktopOpen
     : data.ui.sidebarMobileOpen
   const [logoutOpen, setLogoutOpen] = useState(false)
   const [supportOpen, setSupportOpen] = useState(false)
-  /* Enable sidebar motion only after mount — kills load-time width/opacity flash */
   const [shellReady, setShellReady] = useState(false)
   useEffect(() => {
     setShellReady(true)
@@ -324,26 +297,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     location.pathname.startsWith(settingsPath) ||
     location.pathname.startsWith(accountPath)
   const showUpgrade = (workspace?.plan ?? 'free') === 'free'
-
-  /* Mobile: drawer. Desktop: open = 260, closed = rail 52. */
   const railCollapsed = isDesktop && !open
   const labelsOpen = !isDesktop || open
-
-  useEffect(() => {
-    const root = document.documentElement
-    const theme = data.user.theme
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-
-    function apply() {
-      const dark = theme === 'dark' || (theme === 'system' && mq.matches)
-      root.classList.toggle('dark', dark)
-    }
-
-    apply()
-    if (theme !== 'system') return
-    mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
-  }, [data.user.theme])
 
   useEffect(() => {
     if (workspaceMissing) {
@@ -367,13 +322,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (!isDesktop && data.ui.sidebarMobileOpen) {
       setSidebarMobileOpen(false)
     }
+    // pathname only: avoid re-running when flag flips from this effect itself
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
 
-  /*
-   * Entering or leaving mobile: always reset mobile open to false.
-   * Desktop open state is independent and is not touched.
-   */
   useEffect(() => {
     setSidebarMobileOpen(false)
   }, [isDesktop])
@@ -448,7 +400,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <DrawerDescription className="sr-only">
               Workspace navigation and account
             </DrawerDescription>
-            <ShellChrome {...chromeProps} open isDesktop={false} railCollapsed={false} labelsOpen />
+            <ShellChrome
+              {...chromeProps}
+              open
+              isDesktop={false}
+              railCollapsed={false}
+              labelsOpen
+            />
           </DrawerContent>
         </Drawer>
       )}
@@ -481,8 +439,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           onClick={() => navigate(`${settingsPath}?tab=plan`)}
           className={cn(
             'pill-focus fixed z-20 inline-flex h-[34px] items-center gap-[3px] rounded-lg',
-            'bg-transparent px-3 text-[14px] font-medium text-[#2c67c5]',
-            'hover:bg-[#2c67c5]/[0.09] dark:text-[#7ab7ff]',
+            'bg-transparent px-3 text-[14px] font-medium',
+            brandBlueText,
+            'hover:bg-[#2c67c5]/[0.09]',
             'top-[max(0.5rem,env(safe-area-inset-top))] right-[max(0.5rem,env(safe-area-inset-right))]',
             'mt-1 me-1',
           )}

@@ -41,9 +41,10 @@ the example** (tokens, spacing, hierarchy) — do not abandon Priority 1.
 
 1. **Chrome geometry** — Desktop open ~260px (`--sidebar-width`), rail ~52px
    (`--sidebar-rail`). Quiet 1px edge. Collapse is **icon-first** (labels fade /
-   width-collapse; icons stay put). Shell order: **brand → workspace → product nav
-   → account** (workspace under brand as primary context; account alone in footer).
-   Free/Pro chip is a real control (own hit-target), not nested inside the menu trigger.
+   width-collapse; icons stay put). Shell order: **brand → product nav → account**.
+   Workspaces switch/create/settings live in the **account menu** (not a second
+   chrome card) so the rail stays ChatGPT-calm. Current workspace name stays ambient
+   in page content. Upgrade remains the corner control / settings plan tab.
    Metrics notes: `docs/shell-metrics.md`.
 
 2. **Density** — Tool-dense, not airy admin. ~14px body text, tight nav rows
@@ -59,9 +60,10 @@ the example** (tokens, spacing, hierarchy) — do not abandon Priority 1.
    Prefer Base UI `data-starting-style` / `data-ending-style` over dead
    `animate-in` stacks.
 
-5. **Hierarchy** — Shell order is fixed: **brand → workspace → product nav →
-   account**. Main content stays calm (title, short line, primary CTA, empty
-   state). Don’t clutter main with secondary chrome or invent a second left nav.
+5. **Hierarchy** — Shell order is fixed: **brand → product nav → account**.
+   Workspace is product context (page chrome + account menu), not a second
+   identity card in the rail. Main content stays calm (title, short line, primary
+   CTA, empty state). Don’t clutter main with secondary chrome or invent a second left nav.
 
 6. **Dialogs as places** — Multi-section config (settings / account) = focused
    large panel. One-shot confirms (log out) = small alert. Build **panel content**
@@ -77,6 +79,18 @@ the example** (tokens, spacing, hierarchy) — do not abandon Priority 1.
 - New feature: compose `ui/*` + tokens + thin route. Do not invent one-off menus
   or modals outside `ui/*`.
 - Prefer `DropdownMenu*`; prefer `Tip` for shell icon tooltips.
+- **Kit inventory:** some `ui/*` files may not be used on every screen yet
+  (`avatar`, `field`, `separator`, `switch`, …). Keep them — they are for agent
+  velocity / upcoming features, not dead code. Prefer them before inventing new
+  primitives.
+
+### Shell extras (optional / not mounted)
+
+- **`WorkspaceSwitcher`** — rail workspace card (under brand or footer). **Not**
+  used by `AppShell` (calm rail: brand → nav → account). Workspace switch lives
+  in **`UserAccountMenu`** via `workspace-menu.tsx`. Mount `WorkspaceSwitcher`
+  only if a fork wants always-visible workspace chrome.
+- **`FreeUpgradeBadge`** — for that optional switcher row (overlay chip).
 
 ### Adding a shadcn-style component
 
@@ -102,17 +116,22 @@ the example** (tokens, spacing, hierarchy) — do not abandon Priority 1.
 ```text
 app/
   components/
-    shell/     # PROTECTED — AppShell, WorkspaceSwitcher, BrandMark, menus
+    shell/     # PROTECTED — AppShell, UserAccountMenu, BrandMark, …
+               # WorkspaceSwitcher optional (not mounted); workspace-menu shared
     ui/        # shadcn-compatible primitives over Base UI (velocity kit)
   lib/
-    store.ts       # workspaces, items, tickets, ui prefs
-    nav-config.ts  # product nav (edit per fork)
-    app-config.ts  # APP_NAME / tagline
+    store.ts              # workspaces, items, tickets, ui prefs
+    nav-config.ts         # product nav (edit per fork)
+    app-config.ts         # APP_NAME / tagline
+    brand.ts              # upgrade blue accent helpers
+    use-document-theme.ts # html.dark sync
+    use-is-desktop.ts     # md breakpoint
   routes/          # thin screens under /w/:workspaceId
   app.css          # Tailwind + shadcn @theme tokens + sidebar width/rail only
 docs/
   shell-metrics.md # live geometry reference for shell
 ```
+
 
 ### Product rules
 
