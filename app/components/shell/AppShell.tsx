@@ -199,8 +199,13 @@ function ShellChrome({
         </div>
       </div>
 
-      {/* Brand header + spacer (~ first nav y) */}
-      <div className="h-2 shrink-0" aria-hidden />
+      {/*
+        Hierarchy (option B): brand → workspace → product nav → account.
+        Workspace sits under brand so “which world” is primary context.
+      */}
+      <div className="h-1.5 shrink-0" aria-hidden />
+      <WorkspaceSwitcher open={labelsOpen} menuSide="bottom" />
+      <div className="h-1.5 shrink-0" aria-hidden />
 
       <nav className="relative z-10 flex min-h-0 flex-1 flex-col gap-px overflow-y-auto overflow-x-hidden">
         {PRODUCT_NAV.map((item) => {
@@ -262,8 +267,6 @@ function ShellChrome({
       </nav>
 
       <div className="relative z-10 mt-auto flex shrink-0 flex-col gap-0 pb-1.5 pt-0">
-        <hr className="pointer-events-none mx-1.5 mt-1.5 mb-1.5 box-border h-0 w-auto shrink-0 border-0 border-t border-black/[0.06] dark:border-white/10" />
-        <WorkspaceSwitcher open={labelsOpen} />
         <hr className="pointer-events-none mx-1.5 mt-1.5 mb-1.5 box-border h-0 w-auto shrink-0 border-0 border-t border-black/[0.06] dark:border-white/10" />
         <UserAccountMenu
           open={labelsOpen}

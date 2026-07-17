@@ -28,13 +28,20 @@ const CHEVRON =
   'h-4 w-4 shrink-0 text-muted-foreground opacity-40 transition-opacity group-hover/ws:opacity-70 group-hover/profile:opacity-70'
 
 /**
- * Workspace footer card.
+ * Workspace switcher — primary context under brand (shell option B).
  *
  * Layout rule: never nest interactive controls inside DropdownMenuTrigger.
  * The trigger is an absolute <div> overlay; the Free upgrade chip sits above
  * it with pointer-events so Free/Pro share the same single-line chrome.
  */
-export function WorkspaceSwitcher({ open }: { open: boolean }) {
+export function WorkspaceSwitcher({
+  open,
+  menuSide = 'bottom',
+}: {
+  open: boolean
+  /** Menu opens below when under brand; use "top" if ever placed in the footer. */
+  menuSide?: 'top' | 'bottom'
+}) {
   const data = useAppStore()
   const navigate = useNavigate()
   const active = data.workspaces.find((w) => w.id === data.activeWorkspaceId)
@@ -144,7 +151,7 @@ export function WorkspaceSwitcher({ open }: { open: boolean }) {
           </span>
         </div>
 
-        <DropdownMenuContent side="top" align="start" className="w-72">
+        <DropdownMenuContent side={menuSide} align="start" className="w-72">
           <DropdownMenuItem onClick={openSettings}>
             <Settings
               className="h-[18px] w-[18px] opacity-80"

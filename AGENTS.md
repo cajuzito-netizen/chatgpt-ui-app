@@ -41,8 +41,9 @@ the example** (tokens, spacing, hierarchy) — do not abandon Priority 1.
 
 1. **Chrome geometry** — Desktop open ~260px (`--sidebar-width`), rail ~52px
    (`--sidebar-rail`). Quiet 1px edge. Collapse is **icon-first** (labels fade /
-   width-collapse; icons stay put). Footer: **workspace card + user card**. Free/Pro
-   chip is a real control (own hit-target), not nested inside the menu trigger.
+   width-collapse; icons stay put). Shell order: **brand → workspace → product nav
+   → account** (workspace under brand as primary context; account alone in footer).
+   Free/Pro chip is a real control (own hit-target), not nested inside the menu trigger.
    Metrics notes: `docs/shell-metrics.md`.
 
 2. **Density** — Tool-dense, not airy admin. ~14px body text, tight nav rows
@@ -58,7 +59,7 @@ the example** (tokens, spacing, hierarchy) — do not abandon Priority 1.
    Prefer Base UI `data-starting-style` / `data-ending-style` over dead
    `animate-in` stacks.
 
-5. **Hierarchy** — Shell order is fixed: **brand → product nav → workspace →
+5. **Hierarchy** — Shell order is fixed: **brand → workspace → product nav →
    account**. Main content stays calm (title, short line, primary CTA, empty
    state). Don’t clutter main with secondary chrome or invent a second left nav.
 
